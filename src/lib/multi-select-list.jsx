@@ -1,39 +1,9 @@
 import React, { useState } from 'react';
 import '../css/multi-select.scss';
+import data from '../data/cities.json'
 
 function MultiSelectList() {
-  const [items, setItems] = useState([
-    {
-      caption: 'Item1',
-      defaultCaption: 'Item1',
-      selected: true,
-      key: '1',
-    },
-    {
-      caption: 'Item2',
-      defaultCaption: 'Item2',
-      selected: false,
-      key: '2',
-    },
-    {
-      caption: 'Item3',
-      defaultCaption: 'Item3',
-      selected: true,
-      key: '3',
-    },
-    {
-      caption: 'Item4',
-      defaultCaption: 'Item4',
-      selected: false,
-      key: '4',
-    },
-    {
-      caption: 'Item5',
-      defaultCaption: 'Item5',
-      selected: true,
-      key: '5',
-    },
-  ]);
+  const [items, setItems] = useState(data);
 
   const toggleActive = (key) => {
     let updatedItems = items.map((item) => {
