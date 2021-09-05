@@ -1,29 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/multi-select.scss';
-import data from '../data/cities.json'
 
-function MultiSelectList() {
-  const [items, setItems] = useState(data);
+function MultiSelectList({ data, load, type }) {
+  const [list, setList] = useState([]);
 
-  const toggleActive = (key) => {
-    let updatedItems = items.map((item) => {
-      if (item.key === key) {
-        item.selected = !item.selected;
-        return item;
+  useEffect(() => {
+    if (!data && !load) {
+      throw new Error('Either data or load function is required.');
+    }
+
+    if (data) {
+      setList(data);
+    } else if (load) {
+      load()
+        .then((data) => {
+          setList(data);
+        })
+        .catch(() => {
+          throw new Error('Error in fetching data. check your load function');
+        });
+    }
+  }, [data, load]);
+
+  const setActive = (key) => {
+    let updatedList = list.map((li) => {
+      if (type && type === 'single-select' && li.isSelected) {
+        li.isSelected = false;
       }
-      return item;
+
+      if (li.key === key) {
+        li.isSelected = !li.isSelected;
+        return li;
+      }
+
+      return li;
     });
 
-    setItems(updatedItems);
+    setList(updatedList);
   };
 
   return (
     <div className="list-group">
-      {items.map((item) => {
-        let classString = `list-item ${item.selected ? 'active' : ''}`;
+      {list.map((item) => {
+        let classString = `list-item ${item.isSelected ? 'active' : ''}`;
 
         return (
-          <div key={item.key} className={classString} onClick={() => toggleActive(item.key)}>
+          <div key={item.key} className={classString} onClick={() => setActive(item.key)}>
             {item.caption}
           </div>
         );
