@@ -39,8 +39,13 @@ function MultiSelectList({ data, load, type }) {
     setList(updatedList);
   };
 
+  const isEmptyList = () => {
+    return !list || list.length === 0;
+  };
+
   return (
-    <div className="list-group">
+    <div className={`list-group ${isEmptyList() ? 'loading' : ''}`}>
+      {isEmptyList() && <div className="loading-icon"></div>}
       {list.map((item) => {
         let classString = `list-item ${item.isSelected ? 'active' : ''}`;
 
