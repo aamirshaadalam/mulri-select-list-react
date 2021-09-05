@@ -1,18 +1,43 @@
 .list-group {
-    padding: 5px 0px 5px 10px;
-    border-right: 1px solid rgb(182, 195, 204);
+  padding: 5px 0px 5px 10px;
+  border-right: 1px solid rgb(182, 195, 204);
+  height: 100%;
 
-    .list-item {
-        height: 35px;
-        line-height: 35px;
-        border-bottom: 1px dotted rgb(182, 195, 204);
-        cursor: pointer;
-        padding-left: 5px;
-        border-left: 4px solid transparent;
+  &.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-        &.active {
-            border-left: 4px solid rgb(0, 122, 204);
-            background: rgb(238, 251, 255);
-        }
+  .loading-icon {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    border: 3px solid rgb(238, 251, 255);
+    border-top: 3px solid rgb(0, 122, 204);
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .list-item {
+    height: 35px;
+    line-height: 35px;
+    border-bottom: 1px dotted rgb(182, 195, 204);
+    cursor: pointer;
+    padding-left: 5px;
+    border-left: 4px solid transparent;
+
+    &.active {
+      border-left: 4px solid rgb(0, 122, 204);
+      background: rgb(238, 251, 255);
+    }
+  }
 }
