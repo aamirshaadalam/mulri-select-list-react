@@ -1,6 +1,10 @@
+$gray5: rgb(182, 195, 204);
+$primary-light: rgb(238, 251, 255);
+$primary-default: rgb(0, 122, 204);
+
 .list-group {
   padding: 5px 0px 5px 10px;
-  border-right: 1px solid rgb(182, 195, 204);
+  border-right: 1px solid $gray5;
   height: 100%;
 
   &.loading {
@@ -13,8 +17,8 @@
     height: 25px;
     width: 25px;
     border-radius: 50%;
-    border: 3px solid rgb(238, 251, 255);
-    border-top: 3px solid rgb(0, 122, 204);
+    border: 3px solid $primary-light;
+    border-top: 3px solid $primary-default;
     animation: spin 1s linear infinite;
   }
 
@@ -36,8 +40,62 @@
     border-left: 4px solid transparent;
 
     &.active {
-      border-left: 4px solid rgb(0, 122, 204);
-      background: rgb(238, 251, 255);
+      border-left: 4px solid $primary-default;
+      background: $primary-light;
     }
   }
+
+  .search-container {
+    height: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+
+    .icon-search {
+      margin: -26px;
+    }
+
+    .search-box {
+      outline: 0;
+      border: none;
+      border-bottom: 1px solid $gray5;
+      width: calc(100% - 10px);
+      height: 100%;
+    }
+
+    input:focus {
+      background: $primary-light;
+      border-bottom: 1px solid $primary-default;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src: url('../fonts/icomoon.eot?ohxoya');
+  src: url('../fonts/icomoon.eot?ohxoya#iefix') format('embedded-opentype'), url('../fonts/icomoon.ttf?ohxoya') format('truetype'),
+    url('../fonts/icomoon.woff?ohxoya') format('woff'), url('../fonts/icomoon.svg?ohxoya#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+  content: '\e986';
 }

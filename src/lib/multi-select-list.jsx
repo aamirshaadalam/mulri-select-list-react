@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import ListItem from './list-item';
+import SearchBox from './serach-box';
+import BusyIndicator from './busy-indicator';
 import '../css/multi-select.scss';
 
 function MultiSelectList({ data, load, type }) {
@@ -45,16 +48,12 @@ function MultiSelectList({ data, load, type }) {
 
   return (
     <div className={`list-group ${isEmptyList() ? 'loading' : ''}`}>
-      {isEmptyList() && <div className="loading-icon"></div>}
-      {list.map((item) => {
-        let classString = `list-item ${item.isSelected ? 'active' : ''}`;
-
-        return (
-          <div key={item.key} className={classString} onClick={() => setActive(item.key)}>
-            {item.caption}
-          </div>
-        );
-      })}
+      {isEmptyList() && <BusyIndicator></BusyIndicator>}
+      {!isEmptyList() && <SearchBox placeholderText="Search.."></SearchBox>}
+      {!isEmptyList() &&
+        list.map((item) => {
+          return <ListItem key={item.key} item={item} setActive={setActive}></ListItem>;
+        })}
     </div>
   );
 }
