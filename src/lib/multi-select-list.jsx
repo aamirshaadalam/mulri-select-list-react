@@ -4,7 +4,7 @@ import SearchBox from './serach-box';
 import BusyIndicator from './busy-indicator';
 import '../css/multi-select.scss';
 
-function MultiSelectList({ data, load, type, serachText }) {
+function MultiSelectList({ data, load, type, searchText }) {
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function MultiSelectList({ data, load, type, serachText }) {
   return (
     <div className={`list-group ${isEmptyList() ? 'loading' : ''}`}>
       {isEmptyList() && <BusyIndicator></BusyIndicator>}
-      {!isEmptyList() && <SearchBox {...{ serachText }}></SearchBox>}
+      {!isEmptyList() && <SearchBox {...{ searchText }}></SearchBox>}
       {!isEmptyList() &&
         list.map((item) => {
           return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
