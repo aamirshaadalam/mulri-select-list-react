@@ -23,10 +23,10 @@ $primary-default: rgb(0, 122, 204);
   }
 
   @keyframes spin {
-    0% {
+    from {
       transform: rotate(0deg);
     }
-    100% {
+    to {
       transform: rotate(360deg);
     }
   }
