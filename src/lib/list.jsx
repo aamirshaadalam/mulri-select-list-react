@@ -127,7 +127,7 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
       {isEmptyList() && <BusyIndicator></BusyIndicator>}
       {!isEmptyList() && <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>}
       {!isEmptyList() && (
-        <div className="list-items">
+        <div className='list-items'>
           {currentList.map((item) => {
             return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
           })}
