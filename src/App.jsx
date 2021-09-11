@@ -11,7 +11,7 @@ const getData = () => {
 };
 
 function App() {
-  return <MultiSelectList load={getData} searchText='Search..'></MultiSelectList>;
+  return <MultiSelectList load={getData} searchPlaceholder='Search..'></MultiSelectList>;
 }
 
 export default App;

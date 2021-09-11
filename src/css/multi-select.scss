@@ -1,13 +1,15 @@
 $gray5: rgb(182, 195, 204);
 $primary-light: rgb(238, 251, 255);
 $primary-default: rgb(0, 122, 204);
+$gray12: rgb(79, 100, 114);
 
 .list-group {
   padding: 5px 0px 5px 10px;
-  border-right: 1px solid $gray5;
   height: 100%;
 
   &.loading {
+    border-right: 1px solid $gray5;
+    width: calc(100% - 11px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,6 +21,7 @@ $primary-default: rgb(0, 122, 204);
     border-radius: 50%;
     border: 3px solid $primary-light;
     border-top: 3px solid $primary-default;
+    border-right: 3px solid $primary-default;
     animation: spin 1s linear infinite;
   }
 
@@ -31,28 +34,36 @@ $primary-default: rgb(0, 122, 204);
     }
   }
 
-  .list-item {
-    height: 35px;
-    line-height: 35px;
-    border-bottom: 1px dotted rgb(182, 195, 204);
-    cursor: pointer;
-    padding-left: 5px;
-    border-left: 4px solid transparent;
+  .list-items {
+    overflow-y: auto;
+    border-right: 1px solid $gray5;
+    height: 100%;
 
-    &.active {
-      border-left: 4px solid $primary-default;
-      background: $primary-light;
+    .list-item {
+      height: 35px;
+      line-height: 35px;
+      border-bottom: 1px dotted rgb(182, 195, 204);
+      cursor: pointer;
+      padding-left: 5px;
+      border-left: 4px solid transparent;
+
+      &.active {
+        border-left: 4px solid $primary-default;
+        background: $primary-light;
+      }
     }
   }
 
   .search-container {
     height: 30px;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     display: flex;
     align-items: center;
+    border-right: 1px solid $gray5;
 
     .icon-search {
       margin: -26px;
+      color: $gray12;
     }
 
     .search-box {
