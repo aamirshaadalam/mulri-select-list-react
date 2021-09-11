@@ -55,12 +55,6 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
   );
 
   useEffect(() => {
-    if (!type || ['single-select', 'multi-select'].indexOf(type.toString().toLowerCase()) === -1) {
-      throw new Error(`Invalid property: type.`);
-    }
-  }, [type]);
-
-  useEffect(() => {
     if (!data && !load) {
       throw new Error('Either data or load function is required.');
     }
