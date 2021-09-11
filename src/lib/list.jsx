@@ -58,11 +58,7 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
     if (!type || ['single-select', 'multi-select'].indexOf(type.toString().toLowerCase()) === -1) {
       throw new Error(`Invalid property: type.`);
     }
-
-    if (searchType && ['startswith', 'endswith', 'contains'].indexOf(searchType.toString().toLowerCase()) === -1) {
-      throw new Error(`Invalid property: searchType.`);
-    }
-  }, [type, searchType]);
+  }, [type]);
 
   useEffect(() => {
     if (!data && !load) {
@@ -112,11 +108,11 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
     const serachText = event.target.value.toLowerCase();
 
     const matches = list.filter((item) => {
-      if (searchType.toLowerCase() === 'startswith') {
+      if (searchType && searchType === 'startsWith') {
         return item.caption.toLowerCase().startsWith(serachText);
       }
 
-      if (searchType.toLowerCase() === 'endswith') {
+      if (searchType && searchType === 'endsWith') {
         return item.caption.toLowerCase().endsWith(serachText);
       }
 
