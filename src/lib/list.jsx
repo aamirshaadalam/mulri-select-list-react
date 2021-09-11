@@ -22,7 +22,7 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
-function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
+function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, searchType }) {
   const [list, setList] = useState([]);
   const [currentList, setCurrentList] = useState([]);
 
@@ -58,7 +58,11 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
     if (!type || ['single-select', 'multi-select'].indexOf(type.toString().toLowerCase()) === -1) {
       throw new Error(`Invalid property: type.`);
     }
-  }, [type]);
+
+    if (searchType && ['startswith', 'endswith', 'contains'].indexOf(searchType.toString().toLowerCase()) === -1) {
+      throw new Error(`Invalid property: searchType.`);
+    }
+  }, [type, searchType]);
 
   useEffect(() => {
     if (!data && !load) {
@@ -106,9 +110,17 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
 
   const searchCB = (event) => {
     const serachText = event.target.value.toLowerCase();
-    
+
     const matches = list.filter((item) => {
-      return item.caption.includes(serachText);
+      if (searchType.toLowerCase() === 'startswith') {
+        return item.caption.toLowerCase().startsWith(serachText);
+      }
+
+      if (searchType.toLowerCase() === 'endswith') {
+        return item.caption.toLowerCase().endsWith(serachText);
+      }
+
+      return item.caption.toLowerCase().includes(serachText);
     });
 
     setCurrentList(matches);
