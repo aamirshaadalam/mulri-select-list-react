@@ -24,6 +24,7 @@ const compare = (value1, value2, sortDirection) => {
 
 function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
+  const [currentList, setCurrentList] = useState([]);
 
   const sort = useCallback(
     (items) => {
@@ -64,12 +65,17 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
       throw new Error('Either data or load function is required.');
     }
 
+    let sortedData = [];
     if (data) {
-      setList(sort(data));
+      sortedData = sort(data);
+      setList(sortedData);
+      setCurrentList(sortedData);
     } else if (load) {
       load()
         .then((data) => {
-          setList(sort(data));
+          sortedData = sort(data);
+          setList(sortedData);
+          setCurrentList(sortedData);
         })
         .catch(() => {
           throw new Error('Error in fetching data. check your load function');
@@ -91,20 +97,30 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn }) {
       return li;
     });
 
-    setList(updatedList);
+    setCurrentList(updatedList);
   };
 
   const isEmptyList = () => {
     return !list || list.length === 0;
   };
 
+  const searchCB = (event) => {
+    const serachText = event.target.value.toLowerCase();
+    
+    const matches = list.filter((item) => {
+      return item.caption.includes(serachText);
+    });
+
+    setCurrentList(matches);
+  };
+
   return (
     <div className={`list-group ${isEmptyList() ? 'loading' : ''}`}>
       {isEmptyList() && <BusyIndicator></BusyIndicator>}
-      {!isEmptyList() && <SearchBox {...{ searchPlaceholder }}></SearchBox>}
+      {!isEmptyList() && <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>}
       {!isEmptyList() && (
         <div className="list-items">
-          {list.map((item) => {
+          {currentList.map((item) => {
             return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
           })}
         </div>

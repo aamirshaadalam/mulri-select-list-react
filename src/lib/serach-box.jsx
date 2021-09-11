@@ -1,9 +1,9 @@
 import React from 'react';
 
-function SearchBox({ searchPlaceholder }) {
+function SearchBox({ searchPlaceholder, searchCB }) {
   return (
     <div className="search-container">
-      <input type="text" className="search-box" placeholder={searchPlaceholder}></input>
+      <input type="text" className="search-box" placeholder={searchPlaceholder} onKeyUp={searchCB}></input>
       <span className="icon-search"></span>
     </div>
   );
