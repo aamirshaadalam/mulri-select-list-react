@@ -119,13 +119,15 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
   return (
     <div className={`list-group ${isEmptyList() ? 'loading' : ''}`}>
       {isEmptyList() && <BusyIndicator></BusyIndicator>}
-      {!isEmptyList() && <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>}
       {!isEmptyList() && (
-        <div className='list-items'>
-          {currentList.map((item) => {
-            return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
-          })}
-        </div>
+        <>
+          <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>
+          <div className='list-items'>
+            {currentList.map((item) => {
+              return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
+            })}
+          </div>
+        </>
       )}
     </div>
   );
