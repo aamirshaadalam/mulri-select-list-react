@@ -1,5 +1,5 @@
 import './css/App.css';
-import MultiSelectList from './lib/multi-select-list';
+import List from './lib/list';
 import data from './data/cities.json';
 
 const getData = () => {
@@ -11,7 +11,7 @@ const getData = () => {
 };
 
 function App() {
-  return <MultiSelectList load={getData}></MultiSelectList>;
+  return <List load={getData} searchPlaceholder='Search..' type='single-select' sortDirection='asc' sortOn='caption'></List>;
 }
 
 export default App;
