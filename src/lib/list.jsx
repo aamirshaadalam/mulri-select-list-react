@@ -81,7 +81,7 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
     }
   }, [data, load, sort]);
 
-  const setActive = (key) => {
+  const setSelected = (key) => {
     let updatedList = list.map((li) => {
       if (type.toString().toLowerCase() === 'single-select' && li.isSelected) {
         li.isSelected = false;
@@ -124,7 +124,7 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
           <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>
           <div className='list-items'>
             {currentList.map((item) => {
-              return <ListItem key={item.key} {...{ item, setActive }}></ListItem>;
+              return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
             })}
           </div>
         </>
