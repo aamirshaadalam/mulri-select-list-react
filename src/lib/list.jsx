@@ -22,6 +22,8 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
+const sortDirections = ['asc', 'desc'];
+
 function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         items &&
         items.length > 0 &&
         sortDirection &&
-        ['asc', 'desc'].indexOf(sortDirection.toString().toLowerCase()) >= 0 &&
+        sortDirections.indexOf(sortDirection.toString().toLowerCase()) >= 0 &&
         sortOn &&
         items[0].hasOwnProperty(sortOn.toString());
 
@@ -74,17 +76,16 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         setLoading(false);
       })
       .catch(() => {
+        setList([]);
+        setCurrentList([]);
         setLoading(false);
         throw new Error('Error in fetching data.');
       });
   }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
   useEffect(() => {
-    if (!data && !loadCallback) {
-      throw new Error('Either data or loadCallback is required.');
-    }
-
     let sortedData = [];
+
     if (data) {
       sortedData = sort(data);
       setList(sortedData);
