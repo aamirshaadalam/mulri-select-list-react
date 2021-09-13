@@ -22,7 +22,7 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
-function List({ data, load, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
+function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentList, setCurrentList] = useState([]);
@@ -66,7 +66,7 @@ function List({ data, load, pageSize, searchAtServer, searchPlaceholder, searchT
     };
 
     setLoading(true);
-    load(config)
+    loadCallback(config)
       .then((data) => {
         sortedData = sort(data);
         setList(sortedData);
@@ -75,13 +75,13 @@ function List({ data, load, pageSize, searchAtServer, searchPlaceholder, searchT
       })
       .catch(() => {
         setLoading(false);
-        throw new Error('Error in fetching data. check your load function');
+        throw new Error('Error in fetching data.');
       });
-  }, [load, pageNumber, pageSize, searchText, sort]);
+  }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
   useEffect(() => {
-    if (!data && !load) {
-      throw new Error('Either data or load function is required.');
+    if (!data && !loadCallback) {
+      throw new Error('Either data or loadCallback is required.');
     }
 
     let sortedData = [];
@@ -89,10 +89,10 @@ function List({ data, load, pageSize, searchAtServer, searchPlaceholder, searchT
       sortedData = sort(data);
       setList(sortedData);
       setCurrentList(sortedData);
-    } else if (load) {
+    } else if (loadCallback) {
       loadData();
     }
-  }, [loadData, data, load, sort]);
+  }, [data, loadCallback, loadData, sort]);
 
   const setSelected = (key) => {
     let updatedList = list.map((li) => {
