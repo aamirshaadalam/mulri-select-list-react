@@ -11,7 +11,7 @@ const getData = (config) => {
 };
 
 function App() {
-  return <List load={getData} searchPlaceholder='Search..' type='single-select' sortDirection='asc' sortOn='caption'></List>;
+  return <List load={getData} searchPlaceholder='Search..' singleSelect sortDirection='asc' sortOn='caption'></List>;
 }
 
 export default App;

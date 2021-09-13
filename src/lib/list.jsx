@@ -22,7 +22,7 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
-function List({ data, load, pageSize, searchAt, searchPlaceholder, searchType, sortDirection, sortOn, type }) {
+function List({ data, load, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentList, setCurrentList] = useState([]);
@@ -96,7 +96,7 @@ function List({ data, load, pageSize, searchAt, searchPlaceholder, searchType, s
 
   const setSelected = (key) => {
     let updatedList = list.map((li) => {
-      if (type.toString().toLowerCase() === 'single-select' && li.isSelected) {
+      if (singleSelect && li.isSelected) {
         li.isSelected = false;
       }
 
@@ -114,7 +114,7 @@ function List({ data, load, pageSize, searchAt, searchPlaceholder, searchType, s
   const searchCallback = (event) => {
     setSearchText(event.target.value.toLowerCase());
 
-    if (searchAt && searchAt.toString().toLowerCase() === 'server') {
+    if (searchAtServer) {
       setPageNumber(1);
       loadData();
     } else {
