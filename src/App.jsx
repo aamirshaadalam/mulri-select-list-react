@@ -2,7 +2,7 @@ import './css/App.css';
 import List from './lib/list';
 import data from './data/cities.json';
 
-const getData = () => {
+const getData = (config) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(data);

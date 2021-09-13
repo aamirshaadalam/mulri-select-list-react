@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ListItem from './list-item';
-import SearchBox from './serach-box';
+import SearchBox from './search-box';
 import BusyIndicator from './busy-indicator';
 import '../css/list.scss';
 
@@ -22,10 +22,12 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
-function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, searchType }) {
+function List({ data, load, pageSize, searchAt, searchPlaceholder, searchType, sortDirection, sortOn, type }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentList, setCurrentList] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [searchText, setSearchText] = useState('');
 
   const sort = useCallback(
     (items) => {
@@ -55,6 +57,28 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
     [sortDirection, sortOn]
   );
 
+  const loadData = useCallback(() => {
+    let sortedData = [];
+    const config = {
+      pageNumber,
+      pageSize,
+      searchText,
+    };
+
+    setLoading(true);
+    load(config)
+      .then((data) => {
+        sortedData = sort(data);
+        setList(sortedData);
+        setCurrentList(sortedData);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        throw new Error('Error in fetching data. check your load function');
+      });
+  }, [load, pageNumber, pageSize, searchText, sort]);
+
   useEffect(() => {
     if (!data && !load) {
       throw new Error('Either data or load function is required.');
@@ -66,20 +90,9 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
       setList(sortedData);
       setCurrentList(sortedData);
     } else if (load) {
-      setLoading(true);
-      load()
-        .then((data) => {
-          sortedData = sort(data);
-          setList(sortedData);
-          setCurrentList(sortedData);
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-          throw new Error('Error in fetching data. check your load function');
-        });
+      loadData();
     }
-  }, [data, load, sort]);
+  }, [loadData, data, load, sort]);
 
   const setSelected = (key) => {
     let updatedList = list.map((li) => {
@@ -98,22 +111,27 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
     setCurrentList(updatedList);
   };
 
-  const searchCB = (event) => {
-    const serachText = event.target.value.toLowerCase();
+  const searchCallback = (event) => {
+    setSearchText(event.target.value.toLowerCase());
 
-    const matches = list.filter((item) => {
-      if (searchType && searchType === 'startsWith') {
-        return item.caption.toLowerCase().startsWith(serachText);
-      }
+    if (searchAt && searchAt.toString().toLowerCase() === 'server') {
+      setPageNumber(1);
+      loadData();
+    } else {
+      const matches = list.filter((item) => {
+        if (searchType && searchType === 'startsWith') {
+          return item.caption.toLowerCase().startsWith(searchText);
+        }
 
-      if (searchType && searchType === 'endsWith') {
-        return item.caption.toLowerCase().endsWith(serachText);
-      }
+        if (searchType && searchType === 'endsWith') {
+          return item.caption.toLowerCase().endsWith(searchText);
+        }
 
-      return item.caption.toLowerCase().includes(serachText);
-    });
+        return item.caption.toLowerCase().includes(searchText);
+      });
 
-    setCurrentList(matches);
+      setCurrentList(matches);
+    }
   };
 
   return (
@@ -121,7 +139,7 @@ function List({ data, load, type, searchPlaceholder, sortDirection, sortOn, sear
       {loading && <BusyIndicator></BusyIndicator>}
       {!loading && (
         <>
-          <SearchBox {...{ searchPlaceholder, searchCB }}></SearchBox>
+          <SearchBox {...{ searchPlaceholder, searchCallback }}></SearchBox>
           <div className='list-items'>
             {currentList.map((item) => {
               return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
