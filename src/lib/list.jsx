@@ -23,6 +23,9 @@ const compare = (value1, value2, sortDirection) => {
 };
 
 const sortDirections = ['asc', 'desc'];
+const STARTS_WITH = 'startsWith';
+const ENDS_WITH = 'endsWith';
+const STRING = 'string';
 
 function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
@@ -46,7 +49,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         sortedItems.sort((item1, item2) => {
           const val1 = item1[sortOn];
           const val2 = item2[sortOn];
-          if (typeof val1 === 'string') {
+          if (typeof val1 === STRING) {
             return compare(val1.toLowerCase(), val2.toLowerCase(), sortDirection);
           } else {
             return compare(val1, val2, sortDirection);
@@ -120,11 +123,11 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
       loadData();
     } else {
       const matches = list.filter((item) => {
-        if (searchType && searchType === 'startsWith') {
+        if (searchType && searchType === STARTS_WITH) {
           return item.caption.toLowerCase().startsWith(searchText);
         }
 
-        if (searchType && searchType === 'endsWith') {
+        if (searchType && searchType === ENDS_WITH) {
           return item.caption.toLowerCase().endsWith(searchText);
         }
 
