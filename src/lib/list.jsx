@@ -27,7 +27,7 @@ const STARTS_WITH = 'startsWith';
 const ENDS_WITH = 'endsWith';
 const STRING = 'string';
 
-function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
+function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentList, setCurrentList] = useState([]);
@@ -66,7 +66,6 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     let sortedData = [];
     const config = {
       pageNumber,
-      pageSize,
       searchText,
     };
 
@@ -84,7 +83,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         setLoading(false);
         throw new Error('Error in fetching data.');
       });
-  }, [loadCallback, pageNumber, pageSize, searchText, sort]);
+  }, [loadCallback, pageNumber, searchText, sort]);
 
   useEffect(() => {
     let sortedData = [];
