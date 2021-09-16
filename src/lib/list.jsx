@@ -139,7 +139,7 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
 
   return (
     <div className={`list-group ${loading ? 'loading' : ''}`}>
-      {loading && <BusyIndicator></BusyIndicator>}
+      {loading && <BusyIndicator className='loading-icon32'></BusyIndicator>}
       {!loading && (
         <>
           <SearchBox {...{ searchPlaceholder, searchCallback }}></SearchBox>
@@ -147,6 +147,9 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
             {currentList.map((item) => {
               return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
             })}
+            <div className='loding-item'>
+              <BusyIndicator className='loading-icon16'></BusyIndicator>
+            </div>
           </div>
         </>
       )}

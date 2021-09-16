@@ -1,7 +1,7 @@
 import React from 'react';
 
-function BusyIndicator() {
-  return <div className='loading-icon'></div>;
+function BusyIndicator({ className }) {
+  return <div {...{ className }}></div>;
 }
 
 export default BusyIndicator;
