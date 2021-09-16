@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import ListItem from './list-item';
 import SearchBox from './search-box';
 import BusyIndicator from './busy-indicator';
@@ -33,6 +33,7 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
   const [currentList, setCurrentList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const loader = useRef(null);
 
   const sort = useCallback(
     (items) => {
@@ -62,27 +63,26 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
     [sortDirection, sortOn]
   );
 
-  const loadData = useCallback(() => {
+  const loadData = useCallback(async () => {
     let sortedData = [];
     const config = {
       pageNumber,
       searchText,
     };
 
-    setLoading(true);
-    loadCallback(config)
-      .then((data) => {
-        sortedData = sort(data);
-        setList(sortedData);
-        setCurrentList(sortedData);
-        setLoading(false);
-      })
-      .catch(() => {
-        setList([]);
-        setCurrentList([]);
-        setLoading(false);
-        throw new Error('Error in fetching data.');
-      });
+    try {
+      setLoading(true);
+      const data = await loadCallback(config);
+      sortedData = sort(data);
+      setList(sortedData);
+      setCurrentList(sortedData);
+      setLoading(false);
+    } catch (error) {
+      setList([]);
+      setCurrentList([]);
+      setLoading(false);
+      throw new Error('Error in fetching data.');
+    }
   }, [loadCallback, pageNumber, searchText, sort]);
 
   useEffect(() => {
@@ -139,6 +139,26 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
     }
   };
 
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 0,
+    };
+
+    const handleObserver = (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        setPageNumber((prev) => prev + 1);
+      }
+    };
+
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+  });
+
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, searchCallback, searchText }}></SearchBox>
@@ -152,6 +172,7 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
             <div className='loding-item'>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
             </div>
+            <div ref={loader} />
           </>
         )}
       </div>
