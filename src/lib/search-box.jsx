@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 function SearchBox({ searchPlaceholder, searchCallback, searchText }) {
   const [searchTerm, setSearchTerm] = useState(searchText);
+  const input = useRef(null);
+
+  const setFocus = () => {
+    if (input.current) {
+      input.current.focus();
+    }
+  };
 
   return (
     <div className='search-container'>
@@ -11,8 +18,9 @@ function SearchBox({ searchPlaceholder, searchCallback, searchText }) {
         placeholder={searchPlaceholder}
         onKeyUp={(e) => searchCallback(e.key, searchTerm)}
         onChange={(e) => setSearchTerm(e.target.value)}
-        value={searchTerm}></input>
-      <span className='icon-search'></span>
+        value={searchTerm}
+        ref={input}></input>
+      <span className='icon-search' onClick={setFocus}></span>
     </div>
   );
 }
