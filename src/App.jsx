@@ -24,7 +24,7 @@ const getData = (config) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(result);
-    }, 5000);
+    }, 3000);
   });
 };
 

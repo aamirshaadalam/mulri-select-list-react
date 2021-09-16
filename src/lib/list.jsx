@@ -114,45 +114,47 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
     setCurrentList(updatedList);
   };
 
-  const searchCallback = (event) => {
-    setSearchText(event.target.value.toLowerCase());
+  const searchCallback = (key, value) => {
+    if (key === 'Enter') {
+      setSearchText(value);
 
-    if (searchAtServer) {
-      setPageNumber(1);
-      loadData();
-    } else {
-      const matches = list.filter((item) => {
-        if (searchType && searchType === STARTS_WITH) {
-          return item.caption.toLowerCase().startsWith(searchText);
-        }
+      if (searchAtServer) {
+        setPageNumber(1);
+        loadData();
+      } else {
+        const matches = list.filter((item) => {
+          if (searchType && searchType === STARTS_WITH) {
+            return item.caption.toLowerCase().startsWith(searchText);
+          }
 
-        if (searchType && searchType === ENDS_WITH) {
-          return item.caption.toLowerCase().endsWith(searchText);
-        }
+          if (searchType && searchType === ENDS_WITH) {
+            return item.caption.toLowerCase().endsWith(searchText);
+          }
 
-        return item.caption.toLowerCase().includes(searchText);
-      });
+          return item.caption.toLowerCase().includes(searchText);
+        });
 
-      setCurrentList(matches);
+        setCurrentList(matches);
+      }
     }
   };
 
   return (
-    <div className={`list-group ${loading ? 'loading' : ''}`}>
-      {loading && <BusyIndicator className='loading-icon32'></BusyIndicator>}
-      {!loading && (
-        <>
-          <SearchBox {...{ searchPlaceholder, searchCallback }}></SearchBox>
-          <div className='list-items'>
+    <div className='list-group'>
+      <SearchBox {...{ searchPlaceholder, searchCallback, searchText }}></SearchBox>
+      <div className={`list-items ${loading ? 'loading' : ''}`}>
+        {loading && <BusyIndicator className='loading-icon32'></BusyIndicator>}
+        {!loading && (
+          <>
             {currentList.map((item) => {
               return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
             })}
             <div className='loding-item'>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
