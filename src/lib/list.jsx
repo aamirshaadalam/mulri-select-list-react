@@ -4,6 +4,13 @@ import SearchBox from './search-box';
 import BusyIndicator from './busy-indicator';
 import '../css/list.scss';
 
+const sortDirections = ['asc', 'desc'];
+const STARTS_WITH = 'startsWith';
+const ENDS_WITH = 'endsWith';
+const STRING = 'string';
+const ENTER = 'Enter';
+const DESC = 'desc';
+
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
 
@@ -15,17 +22,12 @@ const compare = (value1, value2, sortDirection) => {
     result = 1;
   }
 
-  if (sortDirection && sortDirection.toLowerCase() === 'desc') {
+  if (sortDirection && sortDirection.toLowerCase() === DESC) {
     return result * -1;
   }
 
   return result;
 };
-
-const sortDirections = ['asc', 'desc'];
-const STARTS_WITH = 'startsWith';
-const ENDS_WITH = 'endsWith';
-const STRING = 'string';
 
 function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
@@ -94,7 +96,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
       setList([]);
       setCurrentList([]);
       setLoading(false);
-      throw new Error('Error in fetching data.');
+      throw new Error(error);
     }
   }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
@@ -125,7 +127,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   };
 
   const searchCallback = (key, value) => {
-    if (key === 'Enter' || !value) {
+    if (key === ENTER || !value) {
       setSearchText(value);
 
       if (searchAtServer && loadCallback) {
