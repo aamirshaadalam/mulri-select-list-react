@@ -39,6 +39,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   const [showFromSearch, setShowFromSearch] = useState(false);
   const scrollContainer = useRef(null);
   const showPageLoader = !lastPage && pageSize && !showFromSearch;
+  const showListLoader = loading && pageNumber === 1;
 
   const sort = useCallback(
     (items) => {
@@ -202,9 +203,9 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
-      <div className={`list-items ${loading && pageNumber === 1 ? 'loading' : ''}`} ref={scrollContainer}>
-        {loading && pageNumber === 1 && <BusyIndicator className='loading-icon32'></BusyIndicator>}
-        {!(loading && pageNumber === 1) && (
+      <div className={`list-items ${showListLoader ? 'loading' : ''}`} ref={scrollContainer}>
+        {showListLoader && <BusyIndicator className='loading-icon32'></BusyIndicator>}
+        {!showListLoader && (
           <>
             {getCurrentList().map((item) => {
               return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
