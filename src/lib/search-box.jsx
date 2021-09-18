@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-function SearchBox({ searchPlaceholder, searchCallback, searchText }) {
+function SearchBox({ searchPlaceholder, search, searchText }) {
   const [searchTerm, setSearchTerm] = useState(searchText);
   const input = useRef(null);
 
@@ -16,7 +16,7 @@ function SearchBox({ searchPlaceholder, searchCallback, searchText }) {
         type='text'
         className='search-box'
         placeholder={searchPlaceholder}
-        onKeyUp={(e) => searchCallback(e.key, searchTerm)}
+        onKeyUp={(e) => search(e.key, searchTerm)}
         onChange={(e) => setSearchTerm(e.target.value)}
         value={searchTerm}
         ref={input}></input>

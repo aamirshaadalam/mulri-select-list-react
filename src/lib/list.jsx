@@ -130,7 +130,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     [list, updateList]
   );
 
-  const searchCallback = (key, value) => {
+  const search = (key, value) => {
     if (key === ENTER || !value) {
       if (searchAtServer && loadCallback) {
         setSearchText(value);
@@ -201,7 +201,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
 
   return (
     <div className='list-group'>
-      <SearchBox {...{ searchPlaceholder, searchCallback, searchText }}></SearchBox>
+      <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
       <div className={`list-items ${loading && pageNumber === 1 ? 'loading' : ''}`} ref={scrollContainer}>
         {loading && pageNumber === 1 && <BusyIndicator className='loading-icon32'></BusyIndicator>}
         {!(loading && pageNumber === 1) && (
