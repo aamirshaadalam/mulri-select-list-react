@@ -109,44 +109,46 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     }
   }, [data, loadCallback, loadData]);
 
-  const setSelected = (key) => {
-    let updatedList = list.map((li) => {
-      if (singleSelect && li.isSelected) {
-        li.isSelected = false;
-      }
+  const setSelected = useCallback(
+    (key) => {
+      let updatedList = list.map((li) => {
+        if (singleSelect && li.isSelected) {
+          li.isSelected = false;
+        }
 
-      if (li.key === key) {
-        li.isSelected = !li.isSelected;
+        if (li.key === key) {
+          li.isSelected = !li.isSelected;
+          return li;
+        }
+
         return li;
-      }
+      });
 
-      return li;
-    });
-
-    setCurrentList(updatedList);
-  };
+      setCurrentList(updatedList);
+    },
+    [list, singleSelect]
+  );
 
   const searchCallback = (key, value) => {
-    if (key === ENTER || !value) {
-      setSearchText(value);
-
-      if (searchAtServer && loadCallback) {
+    if (searchAtServer && loadCallback) {
+      if (key === ENTER || !value) {
+        setSearchText(value);
         setPageNumber(1);
-      } else {
-        const matches = list.filter((item) => {
-          if (searchType && searchType === STARTS_WITH) {
-            return item.caption.toLowerCase().startsWith(searchText);
-          }
-
-          if (searchType && searchType === ENDS_WITH) {
-            return item.caption.toLowerCase().endsWith(searchText);
-          }
-
-          return item.caption.toLowerCase().includes(searchText);
-        });
-
-        setCurrentList(matches);
       }
+    } else {
+      const matches = list.filter((item) => {
+        if (searchType && searchType === STARTS_WITH) {
+          return item.caption.toLowerCase().startsWith(value);
+        }
+
+        if (searchType && searchType === ENDS_WITH) {
+          return item.caption.toLowerCase().endsWith(value);
+        }
+
+        return item.caption.toLowerCase().includes(value);
+      });
+
+      setCurrentList(matches);
     }
   };
 
@@ -185,7 +187,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
             {currentList.map((item) => {
               return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
             })}
-            <div className={`loding-item ${lastPage ? 'hidden' : ''}`}>
+            <div className={`loding-item ${lastPage || !searchAtServer ? 'hidden' : ''}`}>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
             </div>
           </>
