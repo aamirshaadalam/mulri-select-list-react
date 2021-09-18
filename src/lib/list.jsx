@@ -100,37 +100,13 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     }
   }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
-  const handleScroll = useCallback(
-    (event) => {
-      const { scrollTop, scrollHeight, clientHeight } = event.target;
-      const incrementPage = scrollTop + clientHeight >= scrollHeight - 5 && !lastPage && pageSize && !showFromSearch;
-
-      if (incrementPage) {
-        setPageNumber((prev) => prev + 1);
-      }
-    },
-    [lastPage, pageSize, showFromSearch]
-  );
-
   useEffect(() => {
-    const div = scrollContainer.current;
-
-    if (div) {
-      scrollContainer.current.addEventListener('scroll', handleScroll);
-    }
-
     if (data) {
       setList(data);
     } else if (loadCallback) {
       loadData();
     }
-
-    return () => {
-      if (div) {
-        div.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [data, loadCallback, loadData, handleScroll]);
+  }, [data, loadCallback, loadData]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -182,6 +158,32 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
       }
     }
   };
+
+  const handleScroll = useCallback(
+    (event) => {
+      const { scrollTop, scrollHeight, clientHeight } = event.target;
+      const incrementPage = scrollTop + clientHeight >= scrollHeight - 5 && !lastPage && pageSize && !showFromSearch;
+
+      if (incrementPage) {
+        setPageNumber((prev) => prev + 1);
+      }
+    },
+    [lastPage, pageSize, showFromSearch]
+  );
+
+  useEffect(() => {
+    const div = scrollContainer.current;
+
+    if (div) {
+      scrollContainer.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (div) {
+        div.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll]);
 
   const getCurrentList = () => {
     if (showFromSearch) {
