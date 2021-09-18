@@ -32,11 +32,13 @@ const compare = (value1, value2, sortDirection) => {
 function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentList, setCurrentList] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [lastPage, setLastPage] = useState(false);
+  const [showFromSearch, setShowFromSearch] = useState(false);
   const scrollContainer = useRef(null);
+  const showPageLoader = !lastPage && pageSize && !showFromSearch;
 
   const sort = useCallback(
     (items) => {
@@ -85,16 +87,13 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
 
       if (pageNumber > 1) {
         setList((prevList) => sort([...prevList, ...data]));
-        setCurrentList((prevList) => sort([...prevList, ...data]));
       } else if (pageNumber === 1) {
         setList(sort(data));
-        setCurrentList(sort(data));
       }
 
       setLoading(false);
     } catch (error) {
       setList([]);
-      setCurrentList([]);
       setLoading(false);
       throw new Error(error);
     }
@@ -103,7 +102,6 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   useEffect(() => {
     if (data) {
       setList(data);
-      setCurrentList(data);
     } else if (loadCallback) {
       loadData();
     }
@@ -127,47 +125,56 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   const updateSelections = useCallback(
     (key) => {
       const tempList = updateList(list, key);
-      const currentKeys = currentList.map((item) => item.key);
-      const tempCurrentList = tempList.filter((item) => currentKeys.indexOf(item.key) > -1);
-
       setList(tempList);
-      setCurrentList(tempCurrentList);
     },
-    [list, currentList, updateList]
+    [list, updateList]
   );
 
   const searchCallback = (key, value) => {
-    if (searchAtServer && loadCallback) {
-      if (key === ENTER || !value) {
+    if (key === ENTER || !value) {
+      if (searchAtServer && loadCallback) {
         setSearchText(value);
         setPageNumber(1);
+      } else {
+        if (!value) {
+          setShowFromSearch(false);
+          setSearchResults([]);
+          setLastPage(false);
+        } else {
+          const matches = list.filter((item) => {
+            switch (searchType) {
+              case STARTS_WITH:
+                return item.caption.toLowerCase().startsWith(value);
+              case ENDS_WITH:
+                return item.caption.toLowerCase().endsWith(value);
+              default:
+                return item.caption.toLowerCase().includes(value);
+            }
+          });
+
+          if (pageSize && matches.length < pageSize) {
+            setLastPage(true);
+          } else {
+            setLastPage(false);
+          }
+
+          setShowFromSearch(true);
+          setSearchResults(matches);
+        }
       }
-    } else {
-      const matches = list.filter((item) => {
-        if (searchType && searchType === STARTS_WITH) {
-          return item.caption.toLowerCase().startsWith(value);
-        }
-
-        if (searchType && searchType === ENDS_WITH) {
-          return item.caption.toLowerCase().endsWith(value);
-        }
-
-        return item.caption.toLowerCase().includes(value);
-      });
-
-      setCurrentList(matches);
     }
   };
 
   const handleScroll = useCallback(
     (event) => {
       const { scrollTop, scrollHeight, clientHeight } = event.target;
+      const incrementPage = scrollTop + clientHeight >= scrollHeight - 5 && !lastPage && pageSize && !showFromSearch;
 
-      if (scrollTop + clientHeight >= scrollHeight - 5 && !lastPage) {
+      if (incrementPage) {
         setPageNumber((prev) => prev + 1);
       }
     },
-    [lastPage]
+    [lastPage, pageSize, showFromSearch]
   );
 
   useEffect(() => {
@@ -184,6 +191,14 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     };
   }, [handleScroll]);
 
+  const getCurrentList = () => {
+    if (showFromSearch) {
+      return searchResults;
+    }
+
+    return list;
+  };
+
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, searchCallback, searchText }}></SearchBox>
@@ -191,10 +206,10 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         {loading && pageNumber === 1 && <BusyIndicator className='loading-icon32'></BusyIndicator>}
         {!(loading && pageNumber === 1) && (
           <>
-            {currentList.map((item) => {
+            {getCurrentList().map((item) => {
               return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
             })}
-            <div className={`loding-item ${lastPage || !searchAtServer ? 'hidden' : ''}`}>
+            <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`}>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
             </div>
           </>
