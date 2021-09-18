@@ -2,10 +2,8 @@ import './css/App.css';
 import List from './lib/list';
 import data from './data/cities.json';
 
-const PAGE_SIZE = 25;
-
 const getData = (config) => {
-  const { pageNumber, searchText } = config;
+  const { pageNumber, searchText, pageSize } = config;
   let result = data;
 
   if (searchText) {
@@ -14,9 +12,9 @@ const getData = (config) => {
     });
   }
 
-  if (pageNumber > 0 && PAGE_SIZE) {
-    const start = (pageNumber - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
+  if (pageNumber > 0 && pageSize) {
+    const start = (pageNumber - 1) * pageSize;
+    const end = start + pageSize;
 
     result = result.slice(start, end);
   }
@@ -29,7 +27,9 @@ const getData = (config) => {
 };
 
 function App() {
-  return <List loadCallback={getData} searchPlaceholder='Search..' singleSelect sortDirection='asc' sortOn='caption' searchAtServer></List>;
+  return (
+    <List loadCallback={getData} searchPlaceholder='Search..' singleSelect pageSize={25} searchAtServer></List>
+  );
 }
 
 export default App;

@@ -27,13 +27,14 @@ const STARTS_WITH = 'startsWith';
 const ENDS_WITH = 'endsWith';
 const STRING = 'string';
 
-function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
+function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentList, setCurrentList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
-  const loader = useRef(null);
+  const [lastPage, setLastPage] = useState(false);
+  const scrollContainer = useRef(null);
 
   const sort = useCallback(
     (items) => {
@@ -58,24 +59,36 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
         });
         return sortedItems;
       }
-      return items;
+      return items || [];
     },
     [sortDirection, sortOn]
   );
 
   const loadData = useCallback(async () => {
-    let sortedData = [];
     const config = {
       pageNumber,
+      pageSize,
       searchText,
     };
 
     try {
       setLoading(true);
-      const data = await loadCallback(config);
-      sortedData = sort(data);
-      setList(sortedData);
-      setCurrentList(sortedData);
+      let data = (await loadCallback(config)) || [];
+
+      if (data.length < pageSize) {
+        setLastPage(true);
+      } else if (data.length === pageSize) {
+        setLastPage(false);
+      }
+
+      if (pageNumber > 1) {
+        setList((prevList) => sort([...prevList, ...data]));
+        setCurrentList((prevList) => sort([...prevList, ...data]));
+      } else if (pageNumber === 1) {
+        setList(sort(data));
+        setCurrentList(sort(data));
+      }
+
       setLoading(false);
     } catch (error) {
       setList([]);
@@ -83,19 +96,16 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
       setLoading(false);
       throw new Error('Error in fetching data.');
     }
-  }, [loadCallback, pageNumber, searchText, sort]);
+  }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
   useEffect(() => {
-    let sortedData = [];
-
     if (data) {
-      sortedData = sort(data);
-      setList(sortedData);
-      setCurrentList(sortedData);
+      setList(data);
+      setCurrentList(data);
     } else if (loadCallback) {
       loadData();
     }
-  }, [data, loadCallback, loadData, sort]);
+  }, [data, loadCallback, loadData]);
 
   const setSelected = (key) => {
     let updatedList = list.map((li) => {
@@ -115,12 +125,11 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
   };
 
   const searchCallback = (key, value) => {
-    if (key === 'Enter') {
+    if (key === 'Enter' || !value) {
       setSearchText(value);
 
-      if (searchAtServer) {
+      if (searchAtServer && loadCallback) {
         setPageNumber(1);
-        loadData();
       } else {
         const matches = list.filter((item) => {
           if (searchType && searchType === STARTS_WITH) {
@@ -139,40 +148,44 @@ function List({ data, loadCallback, searchAtServer, searchPlaceholder, searchTyp
     }
   };
 
-  useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: '20px',
-      threshold: 0,
-    };
+  const handleScroll = useCallback(
+    (event) => {
+      const { scrollTop, scrollHeight, clientHeight } = event.target;
 
-    const handleObserver = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
+      if (scrollTop + clientHeight >= scrollHeight - 5 && !lastPage) {
         setPageNumber((prev) => prev + 1);
       }
-    };
+    },
+    [lastPage]
+  );
 
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) {
-      observer.observe(loader.current);
+  useEffect(() => {
+    const div = scrollContainer.current;
+
+    if (div) {
+      scrollContainer.current.addEventListener('scroll', handleScroll);
     }
-  });
+
+    return () => {
+      if (div) {
+        div.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll]);
 
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, searchCallback, searchText }}></SearchBox>
-      <div className={`list-items ${loading ? 'loading' : ''}`}>
-        {loading && <BusyIndicator className='loading-icon32'></BusyIndicator>}
-        {!loading && (
+      <div className={`list-items ${loading && pageNumber === 1 ? 'loading' : ''}`} ref={scrollContainer}>
+        {loading && pageNumber === 1 && <BusyIndicator className='loading-icon32'></BusyIndicator>}
+        {!(loading && pageNumber === 1) && (
           <>
             {currentList.map((item) => {
               return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
             })}
-            <div className='loding-item'>
+            <div className={`loding-item ${lastPage ? 'hidden' : ''}`}>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
             </div>
-            <div ref={loader} />
           </>
         )}
       </div>

@@ -46,30 +46,34 @@ $gray12: rgb(79, 100, 114);
       height: 32px;
       width: 32px;
       border-radius: 50%;
-      border: 4px solid $gray5;
-      border-top: 4px solid $primary-default;
+      border: 2px solid $gray5;
+      border-top: 2px solid $primary-default;
       animation: spin 1s linear infinite;
     }
 
     .loding-item {
       display: flex;
-      padding: 10px 0px;
+      padding: 20px 0px;
       justify-content: center;
+
+      &.hidden {
+        display: none;
+      }
 
       .loading-icon16 {
         height: 16px;
         width: 16px;
         border-radius: 50%;
-        border: 4px solid $gray5;
-        border-top: 4px solid $primary-default;
+        border: 2px solid $gray5;
+        border-top: 2px solid $primary-default;
         animation: spin 1s linear infinite;
       }
     }
   }
 
   .search-container {
-    height: 30px;
-    padding-bottom: 10px;
+    height: 40px;
+    padding: 10px 0px;
     display: flex;
     align-items: center;
     border-right: 1px solid $gray5;
