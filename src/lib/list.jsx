@@ -109,24 +109,31 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     }
   }, [data, loadCallback, loadData]);
 
-  const setSelected = useCallback(
-    (key) => {
-      let updatedList = list.map((li) => {
-        if (singleSelect && li.isSelected) {
-          li.isSelected = false;
+  const updateList = useCallback(
+    (items, key) => {
+      return items.map((item) => {
+        if (item.key === key) {
+          item.isSelected = !item.isSelected;
+        } else if (singleSelect && item.isSelected) {
+          item.isSelected = false;
         }
 
-        if (li.key === key) {
-          li.isSelected = !li.isSelected;
-          return li;
-        }
-
-        return li;
+        return item;
       });
-
-      setCurrentList(updatedList);
     },
-    [list, singleSelect]
+    [singleSelect]
+  );
+
+  const updateSelections = useCallback(
+    (key) => {
+      const tempList = updateList(list, key);
+      const currentKeys = currentList.map((item) => item.key);
+      const tempCurrentList = tempList.filter((item) => currentKeys.indexOf(item.key) > -1);
+
+      setList(tempList);
+      setCurrentList(tempCurrentList);
+    },
+    [list, currentList, updateList]
   );
 
   const searchCallback = (key, value) => {
@@ -185,7 +192,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
         {!(loading && pageNumber === 1) && (
           <>
             {currentList.map((item) => {
-              return <ListItem key={item.key} {...{ item, setSelected }}></ListItem>;
+              return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
             })}
             <div className={`loding-item ${lastPage || !searchAtServer ? 'hidden' : ''}`}>
               <BusyIndicator className='loading-icon16'></BusyIndicator>
