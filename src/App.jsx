@@ -22,7 +22,7 @@ const getData = (config) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(result);
-    }, 2000);
+    }, 1000);
   });
 };
 
