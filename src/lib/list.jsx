@@ -108,9 +108,9 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     }
   }, [data, loadCallback, loadData]);
 
-  const updateList = useCallback(
-    (items, key) => {
-      return items.map((item) => {
+  const updateSelections = useCallback(
+    (key) => {
+      const listMap = list.map((item) => {
         if (item.key === key) {
           item.isSelected = !item.isSelected;
         } else if (singleSelect && item.isSelected) {
@@ -119,16 +119,9 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
 
         return item;
       });
+      setList(listMap);
     },
-    [singleSelect]
-  );
-
-  const updateSelections = useCallback(
-    (key) => {
-      const tempList = updateList(list, key);
-      setList(tempList);
-    },
-    [list, updateList]
+    [list, singleSelect]
   );
 
   const search = (key, value) => {
@@ -142,7 +135,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
           setSearchResults([]);
           setLastPage(false);
         } else {
-          const matches = list.filter((item) => {
+          const filteredList = list.filter((item) => {
             switch (searchType) {
               case STARTS_WITH:
                 return item.caption.toLowerCase().startsWith(value);
@@ -153,14 +146,14 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
             }
           });
 
-          if (pageSize && matches.length < pageSize) {
+          if (pageSize && filteredList.length < pageSize) {
             setLastPage(true);
           } else {
             setLastPage(false);
           }
 
           setShowFromSearch(true);
-          setSearchResults(matches);
+          setSearchResults(filteredList);
         }
       }
     }
