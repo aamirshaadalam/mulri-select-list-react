@@ -6,6 +6,8 @@ const getData = (config) => {
   const { pageNumber, searchText, pageSize } = config;
   let result = data;
 
+  console.log(`Total number of records: ${data.length}`);
+
   if (searchText) {
     result = data.filter((item) => {
       return item.caption.toLowerCase().includes(searchText);
@@ -28,7 +30,7 @@ const getData = (config) => {
 
 function App() {
   return (
-    <List loadCallback={getData} searchPlaceholder='Search..' singleSelect noRecordsMessage='No Records Found' pageSize={10} totalPages={5}></List>
+    <List loadCallback={getData} searchPlaceholder='Search..' singleSelect noRecordsMessage='No Records Found' pageSize={25} totalPages={40}></List>
   );
 }
 
