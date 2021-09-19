@@ -10,6 +10,7 @@ const ENDS_WITH = 'endsWith';
 const STRING = 'string';
 const ENTER = 'Enter';
 const DESC = 'desc';
+const NO_RECORDS = 'No Records';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -29,7 +30,18 @@ const compare = (value1, value2, sortDirection) => {
   return result;
 };
 
-function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder, searchType, singleSelect, sortDirection, sortOn }) {
+function List({
+  data,
+  loadCallback,
+  pageSize,
+  searchAtServer,
+  searchPlaceholder,
+  searchType,
+  singleSelect,
+  sortDirection,
+  sortOn,
+  noRecordsMessage,
+}) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -38,8 +50,6 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   const [lastPage, setLastPage] = useState(false);
   const [showFromSearch, setShowFromSearch] = useState(false);
   const scrollContainer = useRef(null);
-  const showPageLoader = !lastPage && pageSize && !showFromSearch;
-  const showListLoader = loading && pageNumber === 1;
 
   const sort = useCallback(
     (items) => {
@@ -70,6 +80,7 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
   );
 
   const loadData = useCallback(async () => {
+    debugger;
     const config = {
       pageNumber,
       pageSize,
@@ -185,30 +196,40 @@ function List({ data, loadCallback, pageSize, searchAtServer, searchPlaceholder,
     };
   }, [handleScroll]);
 
-  const getCurrentList = () => {
-    if (showFromSearch) {
-      return searchResults;
-    }
+  const getContent = () => {
+    const displayList = showFromSearch ? searchResults : list;
+    const showPageLoader = !lastPage && pageSize && !showFromSearch;
 
-    return list;
+    if (loading && pageNumber === 1) {
+      return (
+        <div className='list-items center' ref={scrollContainer}>
+          <BusyIndicator className='loading-icon32'></BusyIndicator>
+        </div>
+      );
+    } else if (displayList.length > 0) {
+      return (
+        <div className='list-items' ref={scrollContainer}>
+          {displayList.map((item) => {
+            return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
+          })}
+          <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`}>
+            <BusyIndicator className='loading-icon16'></BusyIndicator>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className='list-items center' ref={scrollContainer}>
+          <div>{noRecordsMessage || NO_RECORDS}</div>
+        </div>
+      );
+    }
   };
 
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
-      <div className={`list-items ${showListLoader ? 'loading' : ''}`} ref={scrollContainer}>
-        {showListLoader && <BusyIndicator className='loading-icon32'></BusyIndicator>}
-        {!showListLoader && (
-          <>
-            {getCurrentList().map((item) => {
-              return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
-            })}
-            <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`}>
-              <BusyIndicator className='loading-icon16'></BusyIndicator>
-            </div>
-          </>
-        )}
-      </div>
+      {getContent()}
     </div>
   );
 }
