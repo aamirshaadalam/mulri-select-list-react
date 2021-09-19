@@ -185,6 +185,11 @@ function List({
   const getContent = () => {
     const displayList = localSearch ? searchResults : list;
     const showPageLoader = totalPages && pageSize && !localSearch && pageNumber < totalPages;
+    let pageLoaderClass = 'loading-item';
+
+    if (!showPageLoader) {
+      pageLoaderClass = `${pageLoaderClass} hidden`;
+    }
 
     if (loading && pageNumber === 1) {
       return (
@@ -198,7 +203,7 @@ function List({
           {displayList.map((item) => {
             return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
           })}
-          <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`} ref={loadMore}>
+          <div className={pageLoaderClass} ref={loadMore}>
             <BusyIndicator className='loading-icon16'></BusyIndicator>
           </div>
         </div>
