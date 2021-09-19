@@ -80,7 +80,6 @@ function List({
   );
 
   const loadData = useCallback(async () => {
-    debugger;
     const config = {
       pageNumber,
       pageSize,
