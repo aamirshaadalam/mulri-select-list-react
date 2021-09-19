@@ -30,7 +30,13 @@ const getData = (config) => {
 
 function App() {
   return (
-    <List loadCallback={getData} searchPlaceholder='Search..' singleSelect noRecordsMessage='No Records Found' pageSize={25} totalPages={40}></List>
+    <List
+      loadCallback={getData}
+      searchPlaceholder='Search..'
+      singleSelect
+      noRecordsMessage='No Records Found'
+      pageSize={25}
+      totalPages={40}></List>
   );
 }
 

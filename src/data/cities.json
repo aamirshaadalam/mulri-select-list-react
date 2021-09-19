@@ -61,7 +61,12 @@
   { "caption": "Asadābād", "defaultCaption": "Asadābād", "isSelected": false, "key": 1148311 },
   { "caption": "Andkhōy", "defaultCaption": "Andkhōy", "isSelected": false, "key": 1148658 },
   { "caption": "Bāzārak", "defaultCaption": "Bāzārak", "isSelected": false, "key": 1429434 },
-  { "caption": "Markaz-e Woluswalī-ye Āchīn", "defaultCaption": "Markaz-e Woluswalī-ye Āchīn", "isSelected": false, "key": 1469706 },
+  {
+    "caption": "Markaz-e Woluswalī-ye Āchīn",
+    "defaultCaption": "Markaz-e Woluswalī-ye Āchīn",
+    "isSelected": false,
+    "key": 1469706
+  },
   { "caption": "Saint John’s", "defaultCaption": "Saint John’s", "isSelected": false, "key": 3576022 },
   { "caption": "The Valley", "defaultCaption": "The Valley", "isSelected": false, "key": 3573374 },
   { "caption": "Sarandë", "defaultCaption": "Sarandë", "isSelected": false, "key": 363243 },
@@ -177,7 +182,12 @@
     "isSelected": false,
     "key": 3433753
   },
-  { "caption": "General José de San Martín", "defaultCaption": "General José de San Martín", "isSelected": false, "key": 3433803 },
+  {
+    "caption": "General José de San Martín",
+    "defaultCaption": "General José de San Martín",
+    "isSelected": false,
+    "key": 3433803
+  },
   { "caption": "Garupá", "defaultCaption": "Garupá", "isSelected": false, "key": 3433836 },
   { "caption": "Formosa", "defaultCaption": "Formosa", "isSelected": false, "key": 3433899 },
   { "caption": "Fontana", "defaultCaption": "Fontana", "isSelected": false, "key": 3433901 },
@@ -188,7 +198,12 @@
   { "caption": "Curuzú Cuatiá", "defaultCaption": "Curuzú Cuatiá", "isSelected": false, "key": 3435103 },
   { "caption": "Corrientes", "defaultCaption": "Corrientes", "isSelected": false, "key": 3435217 },
   { "caption": "Concordia", "defaultCaption": "Concordia", "isSelected": false, "key": 3435261 },
-  { "caption": "Concepción del Uruguay", "defaultCaption": "Concepción del Uruguay", "isSelected": false, "key": 3435264 },
+  {
+    "caption": "Concepción del Uruguay",
+    "defaultCaption": "Concepción del Uruguay",
+    "isSelected": false,
+    "key": 3435264
+  },
   { "caption": "Colegiales", "defaultCaption": "Colegiales", "isSelected": false, "key": 3435356 },
   { "caption": "Chajarí", "defaultCaption": "Chajarí", "isSelected": false, "key": 3435486 },
   { "caption": "Campana", "defaultCaption": "Campana", "isSelected": false, "key": 3435810 },
@@ -200,7 +215,12 @@
   { "caption": "Zapala", "defaultCaption": "Zapala", "isSelected": false, "key": 3832132 },
   { "caption": "Yerba Buena", "defaultCaption": "Yerba Buena", "isSelected": false, "key": 3832260 },
   { "caption": "Villa Regina", "defaultCaption": "Villa Regina", "isSelected": false, "key": 3832647 },
-  { "caption": "Villa Paula de Sarmiento", "defaultCaption": "Villa Paula de Sarmiento", "isSelected": false, "key": 3832653 },
+  {
+    "caption": "Villa Paula de Sarmiento",
+    "defaultCaption": "Villa Paula de Sarmiento",
+    "isSelected": false,
+    "key": 3832653
+  },
   { "caption": "Villa Nueva", "defaultCaption": "Villa Nueva", "isSelected": false, "key": 3832662 },
   { "caption": "Villa María", "defaultCaption": "Villa María", "isSelected": false, "key": 3832694 },
   { "caption": "Villa Dolores", "defaultCaption": "Villa Dolores", "isSelected": false, "key": 3832756 },
@@ -226,14 +246,44 @@
   { "caption": "Santiago del Estero", "defaultCaption": "Santiago del Estero", "isSelected": false, "key": 3835869 },
   { "caption": "Santa Rosa", "defaultCaption": "Santa Rosa", "isSelected": false, "key": 3835994 },
   { "caption": "Santa Lucía", "defaultCaption": "Santa Lucía", "isSelected": false, "key": 3836194 },
-  { "caption": "Santa Fe de la Vera Cruz", "defaultCaption": "Santa Fe de la Vera Cruz", "isSelected": false, "key": 3836277 },
-  { "caption": "San Salvador de Jujuy", "defaultCaption": "San Salvador de Jujuy", "isSelected": false, "key": 3836564 },
-  { "caption": "San Ramón de la Nueva Orán", "defaultCaption": "San Ramón de la Nueva Orán", "isSelected": false, "key": 3836620 },
+  {
+    "caption": "Santa Fe de la Vera Cruz",
+    "defaultCaption": "Santa Fe de la Vera Cruz",
+    "isSelected": false,
+    "key": 3836277
+  },
+  {
+    "caption": "San Salvador de Jujuy",
+    "defaultCaption": "San Salvador de Jujuy",
+    "isSelected": false,
+    "key": 3836564
+  },
+  {
+    "caption": "San Ramón de la Nueva Orán",
+    "defaultCaption": "San Ramón de la Nueva Orán",
+    "isSelected": false,
+    "key": 3836620
+  },
   { "caption": "San Rafael", "defaultCaption": "San Rafael", "isSelected": false, "key": 3836669 },
   { "caption": "San Pedro", "defaultCaption": "San Pedro", "isSelected": false, "key": 3836772 },
-  { "caption": "San Nicolás de los Arroyos", "defaultCaption": "San Nicolás de los Arroyos", "isSelected": false, "key": 3836846 },
-  { "caption": "San Miguel de Tucumán", "defaultCaption": "San Miguel de Tucumán", "isSelected": false, "key": 3836873 },
-  { "caption": "San Martín de los Andes", "defaultCaption": "San Martín de los Andes", "isSelected": false, "key": 3836951 },
+  {
+    "caption": "San Nicolás de los Arroyos",
+    "defaultCaption": "San Nicolás de los Arroyos",
+    "isSelected": false,
+    "key": 3836846
+  },
+  {
+    "caption": "San Miguel de Tucumán",
+    "defaultCaption": "San Miguel de Tucumán",
+    "isSelected": false,
+    "key": 3836873
+  },
+  {
+    "caption": "San Martín de los Andes",
+    "defaultCaption": "San Martín de los Andes",
+    "isSelected": false,
+    "key": 3836951
+  },
   { "caption": "San Martín", "defaultCaption": "San Martín", "isSelected": false, "key": 3836992 },
   { "caption": "San Luis", "defaultCaption": "San Luis", "isSelected": false, "key": 3837056 },
   { "caption": "San Justo", "defaultCaption": "San Justo", "isSelected": false, "key": 3837124 },
@@ -241,7 +291,12 @@
   { "caption": "San José de Jáchal", "defaultCaption": "San José de Jáchal", "isSelected": false, "key": 3837240 },
   { "caption": "San Jorge", "defaultCaption": "San Jorge", "isSelected": false, "key": 3837441 },
   { "caption": "San Francisco", "defaultCaption": "San Francisco", "isSelected": false, "key": 3837675 },
-  { "caption": "San Fernando del Valle de Catamarca", "defaultCaption": "San Fernando del Valle de Catamarca", "isSelected": false, "key": 3837702 },
+  {
+    "caption": "San Fernando del Valle de Catamarca",
+    "defaultCaption": "San Fernando del Valle de Catamarca",
+    "isSelected": false,
+    "key": 3837702
+  },
   { "caption": "San Antonio Oeste", "defaultCaption": "San Antonio Oeste", "isSelected": false, "key": 3837980 },
   { "caption": "Salta", "defaultCaption": "Salta", "isSelected": false, "key": 3838233 },
   { "caption": "Rufino", "defaultCaption": "Rufino", "isSelected": false, "key": 3838506 },
@@ -256,7 +311,12 @@
   { "caption": "Quitilipi", "defaultCaption": "Quitilipi", "isSelected": false, "key": 3839490 },
   { "caption": "Punta Alta", "defaultCaption": "Punta Alta", "isSelected": false, "key": 3839982 },
   { "caption": "Puerto Madryn", "defaultCaption": "Puerto Madryn", "isSelected": false, "key": 3840092 },
-  { "caption": "Presidencia Roque Sáenz Peña", "defaultCaption": "Presidencia Roque Sáenz Peña", "isSelected": false, "key": 3840300 },
+  {
+    "caption": "Presidencia Roque Sáenz Peña",
+    "defaultCaption": "Presidencia Roque Sáenz Peña",
+    "isSelected": false,
+    "key": 3840300
+  },
   { "caption": "Pocito", "defaultCaption": "Pocito", "isSelected": false, "key": 3840860 },
   { "caption": "Plottier", "defaultCaption": "Plottier", "isSelected": false, "key": 3840885 },
   { "caption": "Pergamino", "defaultCaption": "Pergamino", "isSelected": false, "key": 3841490 },
@@ -272,7 +332,12 @@
   { "caption": "Marcos Juárez", "defaultCaption": "Marcos Juárez", "isSelected": false, "key": 3844899 },
   { "caption": "Machagai", "defaultCaption": "Machagai", "isSelected": false, "key": 3845330 },
   { "caption": "Lincoln", "defaultCaption": "Lincoln", "isSelected": false, "key": 3846864 },
-  { "caption": "Libertador General San Martín", "defaultCaption": "Libertador General San Martín", "isSelected": false, "key": 3846915 },
+  {
+    "caption": "Libertador General San Martín",
+    "defaultCaption": "Libertador General San Martín",
+    "isSelected": false,
+    "key": 3846915
+  },
   { "caption": "Las Breñas", "defaultCaption": "Las Breñas", "isSelected": false, "key": 3848687 },
   { "caption": "La Rioja", "defaultCaption": "La Rioja", "isSelected": false, "key": 3848950 },
   { "caption": "La Falda", "defaultCaption": "La Falda", "isSelected": false, "key": 3851331 },
@@ -286,7 +351,12 @@
   { "caption": "General Roca", "defaultCaption": "General Roca", "isSelected": false, "key": 3855065 },
   { "caption": "General Pinedo", "defaultCaption": "General Pinedo", "isSelected": false, "key": 3855074 },
   { "caption": "General Pico", "defaultCaption": "General Pico", "isSelected": false, "key": 3855075 },
-  { "caption": "General Enrique Mosconi", "defaultCaption": "General Enrique Mosconi", "isSelected": false, "key": 3855116 },
+  {
+    "caption": "General Enrique Mosconi",
+    "defaultCaption": "General Enrique Mosconi",
+    "isSelected": false,
+    "key": 3855116
+  },
   { "caption": "Gálvez", "defaultCaption": "Gálvez", "isSelected": false, "key": 3855244 },
   { "caption": "Firmat", "defaultCaption": "Firmat", "isSelected": false, "key": 3855554 },
   { "caption": "Famaillá", "defaultCaption": "Famaillá", "isSelected": false, "key": 3855666 },
@@ -334,7 +404,12 @@
   { "caption": "Aguilares", "defaultCaption": "Aguilares", "isSelected": false, "key": 3866496 },
   { "caption": "Villa Santa Rita", "defaultCaption": "Villa Santa Rita", "isSelected": false, "key": 6693230 },
   { "caption": "Villa Mercedes", "defaultCaption": "Villa Mercedes", "isSelected": false, "key": 7116866 },
-  { "caption": "San Carlos de Bariloche", "defaultCaption": "San Carlos de Bariloche", "isSelected": false, "key": 7647007 },
+  {
+    "caption": "San Carlos de Bariloche",
+    "defaultCaption": "San Carlos de Bariloche",
+    "isSelected": false,
+    "key": 7647007
+  },
   { "caption": "Adrogué", "defaultCaption": "Adrogué", "isSelected": false, "key": 10172104 },
   { "caption": "Pago Pago", "defaultCaption": "Pago Pago", "isSelected": false, "key": 5881576 },
   { "caption": "Wolfsberg", "defaultCaption": "Wolfsberg", "isSelected": false, "key": 2760910 },
@@ -351,7 +426,12 @@
   { "caption": "Schwechat", "defaultCaption": "Schwechat", "isSelected": false, "key": 2765388 },
   { "caption": "Sankt Pölten", "defaultCaption": "Sankt Pölten", "isSelected": false, "key": 2766429 },
   { "caption": "Salzburg", "defaultCaption": "Salzburg", "isSelected": false, "key": 2766824 },
-  { "caption": "Saalfelden am Steinernen Meer", "defaultCaption": "Saalfelden am Steinernen Meer", "isSelected": false, "key": 2766922 },
+  {
+    "caption": "Saalfelden am Steinernen Meer",
+    "defaultCaption": "Saalfelden am Steinernen Meer",
+    "isSelected": false,
+    "key": 2766922
+  },
   { "caption": "Mödling", "defaultCaption": "Mödling", "isSelected": false, "key": 2771335 },
   { "caption": "Lustenau", "defaultCaption": "Lustenau", "isSelected": false, "key": 2772173 },
   { "caption": "Linz", "defaultCaption": "Linz", "isSelected": false, "key": 2772400 },
@@ -360,7 +440,12 @@
   { "caption": "Kufstein", "defaultCaption": "Kufstein", "isSelected": false, "key": 2773300 },
   { "caption": "Krems an der Donau", "defaultCaption": "Krems an der Donau", "isSelected": false, "key": 2773549 },
   { "caption": "Klosterneuburg", "defaultCaption": "Klosterneuburg", "isSelected": false, "key": 2773913 },
-  { "caption": "Klagenfurt am Wörthersee", "defaultCaption": "Klagenfurt am Wörthersee", "isSelected": false, "key": 2774326 },
+  {
+    "caption": "Klagenfurt am Wörthersee",
+    "defaultCaption": "Klagenfurt am Wörthersee",
+    "isSelected": false,
+    "key": 2774326
+  },
   { "caption": "Kapfenberg", "defaultCaption": "Kapfenberg", "isSelected": false, "key": 2774773 },
   { "caption": "Innsbruck", "defaultCaption": "Innsbruck", "isSelected": false, "key": 2775220 },
   { "caption": "Hallein", "defaultCaption": "Hallein", "isSelected": false, "key": 2776951 },
