@@ -41,15 +41,15 @@ function List({
   sortDirection,
   sortOn,
   noRecordsMessage,
+  totalPages,
 }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
-  const [lastPage, setLastPage] = useState(false);
-  const [showFromSearch, setShowFromSearch] = useState(false);
-  const scrollContainer = useRef(null);
+  const [localSearch, setLocalSearch] = useState(false);
+  const loadMore = useRef(null);
 
   const sort = useCallback(
     (items) => {
@@ -88,13 +88,7 @@ function List({
 
     try {
       setLoading(true);
-      let data = (await loadCallback(config)) || [];
-
-      if (data.length < pageSize) {
-        setLastPage(true);
-      } else if (data.length === pageSize) {
-        setLastPage(false);
-      }
+      const data = (await loadCallback(config)) || [];
 
       if (pageNumber > 1) {
         setList((prevList) => sort([...prevList, ...data]));
@@ -141,9 +135,8 @@ function List({
         setPageNumber(1);
       } else {
         if (!value) {
-          setShowFromSearch(false);
+          setLocalSearch(false);
           setSearchResults([]);
-          setLastPage(false);
         } else {
           const filteredList = list.filter((item) => {
             switch (searchType) {
@@ -156,69 +149,63 @@ function List({
             }
           });
 
-          if (pageSize && filteredList.length < pageSize) {
-            setLastPage(true);
-          } else {
-            setLastPage(false);
-          }
-
-          setShowFromSearch(true);
+          setLocalSearch(true);
           setSearchResults(filteredList);
         }
       }
     }
   };
 
-  const handleScroll = useCallback(
-    (event) => {
-      const { scrollTop, scrollHeight, clientHeight } = event.target;
-      const incrementPage = scrollTop + clientHeight >= scrollHeight - 5 && !lastPage && pageSize && !showFromSearch;
+  useEffect(() => {
+    const target = loadMore.current;
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    };
 
-      if (incrementPage) {
+    const observer = new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages) {
         setPageNumber((prev) => prev + 1);
       }
-    },
-    [lastPage, pageSize, showFromSearch]
-  );
+    }, options);
 
-  useEffect(() => {
-    const div = scrollContainer.current;
-
-    if (div) {
-      scrollContainer.current.addEventListener('scroll', handleScroll);
+    if (target) {
+      observer.observe(target);
     }
 
     return () => {
-      if (div) {
-        div.removeEventListener('scroll', handleScroll);
+      if (target) {
+        return observer.unobserve(target);
       }
     };
-  }, [handleScroll]);
+  }, [loading, loadMore, pageNumber, pageSize, totalPages]);
 
   const getContent = () => {
-    const displayList = showFromSearch ? searchResults : list;
-    const showPageLoader = !lastPage && pageSize && !showFromSearch;
+    const displayList = localSearch ? searchResults : list;
+    const showPageLoader = totalPages && pageSize && !localSearch && pageNumber < totalPages;
 
     if (loading && pageNumber === 1) {
       return (
-        <div className='list-items center' ref={scrollContainer}>
+        <div className='list-items center'>
           <BusyIndicator className='loading-icon32'></BusyIndicator>
         </div>
       );
     } else if (displayList.length > 0) {
       return (
-        <div className='list-items' ref={scrollContainer}>
+        <div className='list-items'>
           {displayList.map((item) => {
             return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
           })}
-          <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`}>
+          <div className={`loding-item ${!showPageLoader ? 'hidden' : ''}`} ref={loadMore}>
             <BusyIndicator className='loading-icon16'></BusyIndicator>
           </div>
         </div>
       );
     } else {
       return (
-        <div className='list-items center' ref={scrollContainer}>
+        <div className='list-items center'>
           <div>{noRecordsMessage || NO_RECORDS}</div>
         </div>
       );

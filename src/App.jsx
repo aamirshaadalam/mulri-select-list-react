@@ -27,7 +27,9 @@ const getData = (config) => {
 };
 
 function App() {
-  return <List loadCallback={getData} searchPlaceholder='Search..' singleSelect noRecordsMessage='No Records Found' pageSize={10}></List>;
+  return (
+    <List loadCallback={getData} searchPlaceholder='Search..' singleSelect noRecordsMessage='No Records Found' pageSize={10} totalPages={5}></List>
+  );
 }
 
 export default App;
