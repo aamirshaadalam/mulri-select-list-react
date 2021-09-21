@@ -2,27 +2,13 @@ $gray5: rgb(182, 195, 204);
 $primary-light: rgb(238, 251, 255);
 $primary-default: rgb(0, 122, 204);
 $gray12: rgb(79, 100, 114);
+$gray3: rgb(216, 224, 229);
 
 .list-group {
-  padding: 5px 0px 5px 10px;
-  height: 100%;
-
-  &.loading {
-    border-right: 1px solid $gray5;
-    width: calc(100% - 11px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .loading-icon {
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    border: 3px solid $primary-light;
-    border-top: 3px solid $primary-default;
-    animation: spin 1s linear infinite;
-  }
+  margin: 5px 0px 5px 10px;
+  height: 80%;
+  border: 1px solid $gray5;
+  border-radius: 5px;
 
   @keyframes spin {
     from {
@@ -35,15 +21,15 @@ $gray12: rgb(79, 100, 114);
 
   .list-items {
     overflow-y: auto;
-    border-right: 1px solid $gray5;
-    height: 100%;
+    height: calc(100% - 60px);
 
     .list-item {
       height: 35px;
       line-height: 35px;
-      border-bottom: 1px dotted rgb(182, 195, 204);
+      border-bottom: 1px solid $gray3;
       cursor: pointer;
       padding-left: 5px;
+      margin: 0px 10px;
       border-left: 4px solid transparent;
 
       &.active {
@@ -51,25 +37,73 @@ $gray12: rgb(79, 100, 114);
         background: $primary-light;
       }
     }
+
+    &.center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-icon32 {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      border: 2px solid $gray5;
+      border-top: 2px solid $primary-default;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-item {
+      display: flex;
+      padding: 20px 0px;
+      justify-content: center;
+
+      &.hidden {
+        display: none;
+      }
+
+      .loading-icon16 {
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        border: 2px solid $gray5;
+        border-top: 2px solid $primary-default;
+        animation: spin 1s linear infinite;
+      }
+    }
   }
 
   .search-container {
-    height: 30px;
-    padding-bottom: 10px;
+    height: 40px;
+    padding: 10px 0px;
     display: flex;
     align-items: center;
-    border-right: 1px solid $gray5;
+    margin: 0px 5px;
 
     .icon-search {
-      margin: -26px;
+      margin: -27px;
       color: $gray12;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .icon-clear {
+      margin: -20px;
+      color: $gray12;
+      cursor: pointer;
+      font-size: 20px;
+
+      &.hidden {
+        display: none;
+      }
     }
 
     .search-box {
       outline: 0;
       border: none;
       border-bottom: 1px solid $gray5;
-      width: calc(100% - 10px);
+      width: calc(100% - 14px);
+      margin-left: 5px;
       height: 100%;
     }
 
@@ -82,9 +116,10 @@ $gray12: rgb(79, 100, 114);
 
 @font-face {
   font-family: 'icomoon';
-  src: url('../fonts/icomoon.eot?ohxoya');
-  src: url('../fonts/icomoon.eot?ohxoya#iefix') format('embedded-opentype'), url('../fonts/icomoon.ttf?ohxoya') format('truetype'),
-    url('../fonts/icomoon.woff?ohxoya') format('woff'), url('../fonts/icomoon.svg?ohxoya#icomoon') format('svg');
+  src: url('../fonts/icomoon.eot?i2f38x');
+  src: url('../fonts/icomoon.eot?i2f38x#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?i2f38x') format('truetype'), url('../fonts/icomoon.woff?i2f38x') format('woff'),
+    url('../fonts/icomoon.svg?i2f38x#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -94,6 +129,7 @@ $gray12: rgb(79, 100, 114);
 [class*=' icon-'] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -105,6 +141,9 @@ $gray12: rgb(79, 100, 114);
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-clear:before {
+  content: '\e900';
+}
 .icon-search:before {
-  content: '\e986';
+  content: '\e901';
 }
