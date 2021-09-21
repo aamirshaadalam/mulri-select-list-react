@@ -13,6 +13,7 @@ function SearchBox({ searchPlaceholder, search, searchText }) {
   const clearSearch = () => {
     setSearchTerm('');
     search('');
+    setFocus();
   };
 
   return (
