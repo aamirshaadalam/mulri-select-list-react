@@ -84,6 +84,18 @@ $gray3: rgb(216, 224, 229);
       margin: -27px;
       color: $gray12;
       cursor: pointer;
+      font-size: 20px;
+    }
+
+    .icon-clear {
+      margin: -20px;
+      color: $gray12;
+      cursor: pointer;
+      font-size: 20px;
+
+      &.hidden {
+        display: none;
+      }
     }
 
     .search-box {
@@ -104,10 +116,10 @@ $gray3: rgb(216, 224, 229);
 
 @font-face {
   font-family: 'icomoon';
-  src: url('../fonts/icomoon.eot?ohxoya');
-  src: url('../fonts/icomoon.eot?ohxoya#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?ohxoya') format('truetype'), url('../fonts/icomoon.woff?ohxoya') format('woff'),
-    url('../fonts/icomoon.svg?ohxoya#icomoon') format('svg');
+  src: url('../fonts/icomoon.eot?i2f38x');
+  src: url('../fonts/icomoon.eot?i2f38x#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?i2f38x') format('truetype'), url('../fonts/icomoon.woff?i2f38x') format('woff'),
+    url('../fonts/icomoon.svg?i2f38x#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -117,6 +129,7 @@ $gray3: rgb(216, 224, 229);
 [class*=' icon-'] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -128,6 +141,9 @@ $gray3: rgb(216, 224, 229);
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-clear:before {
+  content: '\e900';
+}
 .icon-search:before {
-  content: '\e986';
+  content: '\e901';
 }

@@ -10,6 +10,11 @@ function SearchBox({ searchPlaceholder, search, searchText }) {
     }
   };
 
+  const clearSearch = () => {
+    setSearchTerm('');
+    search('');
+  };
+
   return (
     <div className='search-container'>
       <input
@@ -21,6 +26,7 @@ function SearchBox({ searchPlaceholder, search, searchText }) {
         value={searchTerm}
         ref={input}></input>
       <span className='icon-search' onClick={setFocus}></span>
+      <span className={`icon-clear ${!searchTerm ? 'hidden' : ''}`} onClick={clearSearch}></span>
     </div>
   );
 }
