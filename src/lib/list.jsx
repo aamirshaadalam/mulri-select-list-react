@@ -220,6 +220,7 @@ function List({
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
+      {/* <div>Clear Selections</div> */}
       {getContent()}
     </div>
   );
