@@ -12,7 +12,7 @@ const ENTER = 'Enter';
 const DESC = 'desc';
 const NO_RECORDS = 'No Records';
 const CLEAR_SELECTIONS = 'Clear Selections';
-const SELECT_ALL = 'Select All';
+// const SELECT_ALL = 'Select All';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -106,14 +106,6 @@ function List({
     }
   }, [loadCallback, pageNumber, pageSize, searchText, sort]);
 
-  useEffect(() => {
-    if (data) {
-      setList(data);
-    } else if (loadCallback) {
-      loadData();
-    }
-  }, [data, loadCallback, loadData]);
-
   const updateSelections = useCallback(
     (key) => {
       const listMap = list.map((item) => {
@@ -129,6 +121,14 @@ function List({
     },
     [list, singleSelect]
   );
+
+  const clearSelections = () => {
+    const listMap = list.map((item) => {
+      item.isSelected = false;
+      return item;
+    });
+    setList(listMap);
+  };
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
@@ -158,38 +158,12 @@ function List({
     }
   };
 
-  useEffect(() => {
-    const target = loadMore.current;
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages) {
-        setPageNumber((prev) => prev + 1);
-      }
-    }, options);
-
-    if (target) {
-      observer.observe(target);
-    }
-
-    return () => {
-      if (target) {
-        return observer.unobserve(target);
-      }
-    };
-  }, [loading, loadMore, pageNumber, pageSize, totalPages]);
-
   const addButtons = (displayList) => {
     if (displayList.length > 0 && !singleSelect) {
       return (
         <div className='btn-container'>
-          <button>{SELECT_ALL}</button>
-          <button>{CLEAR_SELECTIONS}</button>
+          {/* <button>{SELECT_ALL}</button> */}
+          <button onClick={clearSelections}>{CLEAR_SELECTIONS}</button>
         </div>
       );
     }
@@ -234,6 +208,40 @@ function List({
       );
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      setList(data);
+    } else if (loadCallback) {
+      loadData();
+    }
+  }, [data, loadCallback, loadData]);
+
+  useEffect(() => {
+    const target = loadMore.current;
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages) {
+        setPageNumber((prev) => prev + 1);
+      }
+    }, options);
+
+    if (target) {
+      observer.observe(target);
+    }
+
+    return () => {
+      if (target) {
+        return observer.unobserve(target);
+      }
+    };
+  }, [loading, loadMore, pageNumber, pageSize, totalPages]);
 
   return (
     <div className='list-group'>

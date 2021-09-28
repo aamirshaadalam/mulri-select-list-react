@@ -1,6 +1,8 @@
 $gray5: rgb(182, 195, 204);
 $primary-light: rgb(238, 251, 255);
 $primary-default: rgb(0, 122, 204);
+$primary-hover: rgb(0, 92, 153);
+$primary-pressed: rgb(0, 61, 102);
 $gray12: rgb(79, 100, 114);
 $gray3: rgb(216, 224, 229);
 
@@ -17,7 +19,8 @@ $gray3: rgb(216, 224, 229);
 
     button {
       height: 30px;
-      width: calc((100% - 30px) / 2);
+      width: calc((100% - 20px));
+      // width: calc((100% - 30px) / 2);
       border-radius: 0px;
       border: 1px solid $primary-default;
       background: $primary-default;
@@ -26,6 +29,16 @@ $gray3: rgb(216, 224, 229);
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+    }
+
+    button:hover {
+      border: 1px solid $primary-hover;
+      background: $primary-hover;
+    }
+
+    button:focus {
+      border: 1px solid $primary-pressed;
+      background: $primary-pressed;
     }
   }
 
@@ -40,10 +53,10 @@ $gray3: rgb(216, 224, 229);
 
   .list-items {
     overflow-y: auto;
-    height: calc(100% - 60px);
+    height: calc(100% - 80px);
 
     &.multi {
-      height: calc(100% - 100px);
+      height: calc(100% - 120px);
     }
 
     .list-item {
