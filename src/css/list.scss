@@ -6,9 +6,25 @@ $gray3: rgb(216, 224, 229);
 
 .list-group {
   margin: 5px 0px 5px 10px;
-  height: 80%;
+  height: calc(100% - 10px);
   border: 1px solid $gray5;
   border-radius: 5px;
+
+  .btn-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+
+    button {
+      height: 30px;
+      width: calc((100% - 30px) / 2);
+      border-radius: 0px;
+      border: 1px solid $primary-default;
+      background: $primary-default;
+      color: white;
+      cursor: pointer;
+    }
+  }
 
   @keyframes spin {
     from {
@@ -22,6 +38,10 @@ $gray3: rgb(216, 224, 229);
   .list-items {
     overflow-y: auto;
     height: calc(100% - 60px);
+
+    &.multi {
+      height: calc(100% - 100px);
+    }
 
     .list-item {
       height: 35px;

@@ -48,7 +48,6 @@ function App() {
     <List
       loadCallback={getData}
       searchPlaceholder='Search..'
-      singleSelect
       noRecordsMessage='No Records Found'
       pageSize={25}
       totalPages={totalPages}

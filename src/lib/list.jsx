@@ -182,6 +182,19 @@ function List({
     };
   }, [loading, loadMore, pageNumber, pageSize, totalPages]);
 
+  const addButtons = (displayList) => {
+    if (displayList.length > 0 && !singleSelect) {
+      return (
+        <div className='btn-container'>
+          <button>Select All</button>
+          <button>Clear Selections</button>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   const getContent = () => {
     const displayList = localSearch ? searchResults : list;
     const showPageLoader = totalPages && pageSize && !localSearch && pageNumber < totalPages;
@@ -199,14 +212,17 @@ function List({
       );
     } else if (displayList.length > 0) {
       return (
-        <div className='list-items'>
-          {displayList.map((item) => {
-            return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
-          })}
-          <div className={pageLoaderClass} ref={loadMore}>
-            <BusyIndicator className='loading-icon16'></BusyIndicator>
+        <>
+          {addButtons(displayList)}
+          <div className={`list-items ${!singleSelect ? 'multi' : ''}`}>
+            {displayList.map((item) => {
+              return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
+            })}
+            <div className={pageLoaderClass} ref={loadMore}>
+              <BusyIndicator className='loading-icon16'></BusyIndicator>
+            </div>
           </div>
-        </div>
+        </>
       );
     } else {
       return (
@@ -220,7 +236,6 @@ function List({
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
-      {/* <div>Clear Selections</div> */}
       {getContent()}
     </div>
   );
