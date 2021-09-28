@@ -23,6 +23,9 @@ $gray3: rgb(216, 224, 229);
       background: $primary-default;
       color: white;
       cursor: pointer;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
@@ -51,6 +54,9 @@ $gray3: rgb(216, 224, 229);
       padding-left: 5px;
       margin: 0px 10px;
       border-left: 4px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &.active {
         border-left: 4px solid $primary-default;
