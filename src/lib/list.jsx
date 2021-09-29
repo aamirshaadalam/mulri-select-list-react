@@ -3,6 +3,7 @@ import ListItem from './list-item';
 import SearchBox from './search-box';
 import BusyIndicator from './busy-indicator';
 import '../css/list.scss';
+import usePrevious from '../hooks/use-previous';
 
 const sortDirections = ['asc', 'desc'];
 const STARTS_WITH = 'startsWith';
@@ -11,6 +12,7 @@ const STRING = 'string';
 const ENTER = 'Enter';
 const DESC = 'desc';
 const NO_RECORDS = 'No Records';
+const CLEAR_SELECTIONS = 'Clear Selections';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -32,7 +34,7 @@ const compare = (value1, value2, sortDirection) => {
 
 function List({
   data,
-  loadCallback,
+  onLoad,
   pageSize,
   searchAtServer,
   searchPlaceholder,
@@ -42,6 +44,7 @@ function List({
   sortOn,
   noRecordsMessage,
   totalPages,
+  onSelectionsChange,
 }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -49,7 +52,13 @@ function List({
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [localSearch, setLocalSearch] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
   const loadMore = useRef(null);
+  const prevConfig = usePrevious({
+    pageNumber,
+    pageSize,
+    searchText,
+  });
 
   const sort = useCallback(
     (items) => {
@@ -86,9 +95,13 @@ function List({
       searchText,
     };
 
+    if (JSON.stringify(prevConfig) === JSON.stringify(config)) {
+      return;
+    }
+
     try {
       setLoading(true);
-      const data = (await loadCallback(config)) || [];
+      const data = (await onLoad(config)) || [];
 
       if (pageNumber > 1) {
         setList((prevList) => sort([...prevList, ...data]));
@@ -102,15 +115,7 @@ function List({
       setLoading(false);
       throw new Error(error);
     }
-  }, [loadCallback, pageNumber, pageSize, searchText, sort]);
-
-  useEffect(() => {
-    if (data) {
-      setList(data);
-    } else if (loadCallback) {
-      loadData();
-    }
-  }, [data, loadCallback, loadData]);
+  }, [onLoad, pageNumber, pageSize, searchText, sort, prevConfig]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -124,13 +129,32 @@ function List({
         return item;
       });
       setList(listMap);
+
+      let filteredSelections = selectedItems.filter((item) => item !== key);
+
+      if (filteredSelections.length === selectedItems.length) {
+        filteredSelections.push(key);
+      }
+
+      setSelectedItems(filteredSelections);
+      onSelectionsChange(filteredSelections);
     },
-    [list, singleSelect]
+    [list, singleSelect, selectedItems, onSelectionsChange]
   );
+
+  const clearSelections = () => {
+    const listMap = list.map((item) => {
+      item.isSelected = false;
+      return item;
+    });
+    setList(listMap);
+    setSelectedItems([]);
+    onSelectionsChange([]);
+  };
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
-      if (searchAtServer && loadCallback) {
+      if (searchAtServer && onLoad) {
         setSearchText(value);
         setPageNumber(1);
       } else {
@@ -155,6 +179,64 @@ function List({
       }
     }
   };
+
+  const addButtons = (displayList) => {
+    if (displayList.length > 0 && !singleSelect) {
+      return (
+        <div className='btn-container'>
+          <button onClick={clearSelections}>{CLEAR_SELECTIONS}</button>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const getContent = () => {
+    const displayList = localSearch ? searchResults : list;
+    const showPageLoader = totalPages && pageSize && !localSearch && pageNumber < totalPages;
+    let pageLoaderClass = 'loading-item';
+
+    if (!showPageLoader) {
+      pageLoaderClass = `${pageLoaderClass} hidden`;
+    }
+
+    if (loading && pageNumber === 1) {
+      return (
+        <div className='list-items center'>
+          <BusyIndicator className='loading-icon32'></BusyIndicator>
+        </div>
+      );
+    } else if (displayList.length > 0) {
+      return (
+        <>
+          {addButtons(displayList)}
+          <div className={`list-items ${!singleSelect ? 'multi' : ''}`}>
+            {displayList.map((item) => {
+              return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
+            })}
+            <div className={pageLoaderClass} ref={loadMore}>
+              <BusyIndicator className='loading-icon16'></BusyIndicator>
+            </div>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <div className='list-items center'>
+          <div>{noRecordsMessage || NO_RECORDS}</div>
+        </div>
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setList(data);
+    } else if (onLoad) {
+      loadData();
+    }
+  }, [data, onLoad, loadData]);
 
   useEffect(() => {
     const target = loadMore.current;
@@ -182,45 +264,9 @@ function List({
     };
   }, [loading, loadMore, pageNumber, pageSize, totalPages]);
 
-  const getContent = () => {
-    const displayList = localSearch ? searchResults : list;
-    const showPageLoader = totalPages && pageSize && !localSearch && pageNumber < totalPages;
-    let pageLoaderClass = 'loading-item';
-
-    if (!showPageLoader) {
-      pageLoaderClass = `${pageLoaderClass} hidden`;
-    }
-
-    if (loading && pageNumber === 1) {
-      return (
-        <div className='list-items center'>
-          <BusyIndicator className='loading-icon32'></BusyIndicator>
-        </div>
-      );
-    } else if (displayList.length > 0) {
-      return (
-        <div className='list-items'>
-          {displayList.map((item) => {
-            return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
-          })}
-          <div className={pageLoaderClass} ref={loadMore}>
-            <BusyIndicator className='loading-icon16'></BusyIndicator>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className='list-items center'>
-          <div>{noRecordsMessage || NO_RECORDS}</div>
-        </div>
-      );
-    }
-  };
-
   return (
     <div className='list-group'>
       <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
-      {/* <div>Clear Selections</div> */}
       {getContent()}
     </div>
   );
