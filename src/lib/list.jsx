@@ -12,7 +12,6 @@ const ENTER = 'Enter';
 const DESC = 'desc';
 const NO_RECORDS = 'No Records';
 const CLEAR_SELECTIONS = 'Clear Selections';
-// const SELECT_ALL = 'Select All';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -162,7 +161,6 @@ function List({
     if (displayList.length > 0 && !singleSelect) {
       return (
         <div className='btn-container'>
-          {/* <button>{SELECT_ALL}</button> */}
           <button onClick={clearSelections}>{CLEAR_SELECTIONS}</button>
         </div>
       );
