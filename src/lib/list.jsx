@@ -3,6 +3,7 @@ import ListItem from './list-item';
 import SearchBox from './search-box';
 import BusyIndicator from './busy-indicator';
 import '../css/list.scss';
+import usePrevious from '../hooks/use-previous';
 
 const sortDirections = ['asc', 'desc'];
 const STARTS_WITH = 'startsWith';
@@ -33,7 +34,7 @@ const compare = (value1, value2, sortDirection) => {
 
 function List({
   data,
-  loadCallback,
+  onLoad,
   pageSize,
   searchAtServer,
   searchPlaceholder,
@@ -43,6 +44,7 @@ function List({
   sortOn,
   noRecordsMessage,
   totalPages,
+  onSelectionsChange,
 }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -50,7 +52,13 @@ function List({
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [localSearch, setLocalSearch] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
   const loadMore = useRef(null);
+  const prevConfig = usePrevious({
+    pageNumber,
+    pageSize,
+    searchText,
+  });
 
   const sort = useCallback(
     (items) => {
@@ -87,9 +95,13 @@ function List({
       searchText,
     };
 
+    if (JSON.stringify(prevConfig) === JSON.stringify(config)) {
+      return;
+    }
+
     try {
       setLoading(true);
-      const data = (await loadCallback(config)) || [];
+      const data = (await onLoad(config)) || [];
 
       if (pageNumber > 1) {
         setList((prevList) => sort([...prevList, ...data]));
@@ -103,7 +115,7 @@ function List({
       setLoading(false);
       throw new Error(error);
     }
-  }, [loadCallback, pageNumber, pageSize, searchText, sort]);
+  }, [onLoad, pageNumber, pageSize, searchText, sort, prevConfig]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -117,8 +129,17 @@ function List({
         return item;
       });
       setList(listMap);
+
+      let filteredSelections = selectedItems.filter((item) => item !== key);
+
+      if (filteredSelections.length === selectedItems.length) {
+        filteredSelections.push(key);
+      }
+
+      setSelectedItems(filteredSelections);
+      onSelectionsChange(filteredSelections);
     },
-    [list, singleSelect]
+    [list, singleSelect, selectedItems, onSelectionsChange]
   );
 
   const clearSelections = () => {
@@ -127,11 +148,13 @@ function List({
       return item;
     });
     setList(listMap);
+    setSelectedItems([]);
+    onSelectionsChange([]);
   };
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
-      if (searchAtServer && loadCallback) {
+      if (searchAtServer && onLoad) {
         setSearchText(value);
         setPageNumber(1);
       } else {
@@ -210,10 +233,10 @@ function List({
   useEffect(() => {
     if (data) {
       setList(data);
-    } else if (loadCallback) {
+    } else if (onLoad) {
       loadData();
     }
-  }, [data, loadCallback, loadData]);
+  }, [data, onLoad, loadData]);
 
   useEffect(() => {
     const target = loadMore.current;

@@ -20,6 +20,7 @@ function App() {
     const { pageNumber, searchText, pageSize } = config;
     let result = data;
 
+    console.log(JSON.stringify(config));
     console.log(`Total number of records: ${data.length}`);
 
     if (searchText) {
@@ -44,9 +45,14 @@ function App() {
     });
   };
 
+  const selectionsChanged = (selectedItems) => {
+    console.log(selectedItems);
+  };
+
   return (
     <List
-      loadCallback={getData}
+      onLoad={getData}
+      onSelectionsChange={selectionsChanged}
       searchPlaceholder='Search..'
       noRecordsMessage='No Records Found'
       pageSize={25}
