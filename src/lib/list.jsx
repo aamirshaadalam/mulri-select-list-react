@@ -36,7 +36,6 @@ function List({
   data,
   onLoad,
   pageSize,
-  searchAtServer,
   searchPlaceholder,
   searchType,
   singleSelect,
@@ -88,6 +87,15 @@ function List({
     [sortDirection, sortOn]
   );
 
+  const preventRender = useCallback(() => {
+    return (
+      prevConfig &&
+      prevConfig.pageSize === pageSize &&
+      prevConfig.searchText.toLowerCase() === searchText.toLowerCase() &&
+      (prevConfig.pageNumber === pageNumber || pageNumber > totalPages)
+    );
+  }, [prevConfig, pageSize, searchText, pageNumber, totalPages]);
+
   const loadData = useCallback(async () => {
     const config = {
       pageNumber,
@@ -95,13 +103,21 @@ function List({
       searchText,
     };
 
-    if (JSON.stringify(prevConfig) === JSON.stringify(config)) {
+    if (preventRender()) {
       return;
     }
 
     try {
       setLoading(true);
       const data = (await onLoad(config)) || [];
+
+      data.forEach((item) => {
+        if (selectedItems.indexOf(item.key) === -1 && item.isSelected) {
+          item.isSelected = false;
+        } else if (selectedItems.indexOf(item.key) !== -1) {
+          item.isSelected = true;
+        }
+      });
 
       if (pageNumber > 1) {
         setList((prevList) => sort([...prevList, ...data]));
@@ -115,7 +131,7 @@ function List({
       setLoading(false);
       throw new Error(error);
     }
-  }, [onLoad, pageNumber, pageSize, searchText, sort, prevConfig]);
+  }, [onLoad, pageNumber, pageSize, searchText, sort, preventRender, selectedItems]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -128,9 +144,9 @@ function List({
 
         return item;
       });
-      setList(listMap);
 
-      let filteredSelections = selectedItems.filter((item) => item !== key);
+      setList(listMap);
+      let filteredSelections = selectedItems.filter((itemKey) => itemKey !== key);
 
       if (filteredSelections.length === selectedItems.length) {
         filteredSelections.push(key);
@@ -154,8 +170,8 @@ function List({
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
-      if (searchAtServer && onLoad) {
-        setSearchText(value);
+      if (pageSize && totalPages && onLoad) {
+        setSearchText(value || '');
         setPageNumber(1);
       } else {
         if (!value) {
@@ -224,7 +240,7 @@ function List({
     } else {
       return (
         <div className='list-items center'>
-          <div>{noRecordsMessage || NO_RECORDS}</div>
+          <div className='no-data'>{noRecordsMessage || NO_RECORDS}</div>
         </div>
       );
     }

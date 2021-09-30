@@ -29,12 +29,10 @@ function App() {
       });
     }
 
-    computePageCount(result, pageSize);
-
     if (pageNumber > 0 && pageSize) {
+      computePageCount(result, pageSize);
       const start = (pageNumber - 1) * pageSize;
       const end = start + pageSize;
-
       result = result.slice(start, end);
     }
 
@@ -54,11 +52,15 @@ function App() {
       onLoad={getData}
       onSelectionsChange={selectionsChanged}
       searchPlaceholder='Search..'
-      noRecordsMessage='No Records Found'
-      pageSize={25}
-      totalPages={totalPages}
-      searchAtServer></List>
+      noRecordsMessage='No Records Found'></List>
   );
 }
 
 export default App;
+
+// localization of constants
+// no record message
+// search placeholder
+// clear selections
+// icon titles
+// handle scenario when total pages is 0
