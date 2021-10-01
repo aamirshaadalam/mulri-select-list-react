@@ -21,7 +21,6 @@ function App() {
     let result = data;
 
     console.log(JSON.stringify(config));
-    console.log(`Total number of records: ${data.length}`);
 
     if (searchText) {
       result = data.filter((item) => {
@@ -29,7 +28,7 @@ function App() {
       });
     }
 
-    if (pageNumber > 0 && pageSize) {
+    if (pageNumber && pageSize) {
       computePageCount(result, pageSize);
       const start = (pageNumber - 1) * pageSize;
       const end = start + pageSize;
@@ -55,7 +54,16 @@ function App() {
     SEARCH_TOOLTIP: 'Search',
   };
 
-  return <List onLoad={getData} onSelectionsChange={selectionsChanged} captions={captions}></List>;
+  return (
+    <List
+      onLoad={getData}
+      onSelectionsChange={selectionsChanged}
+      captions={captions}
+      pageSize={100}
+      totalPages={totalPages}
+      sortDirection='asc'
+      sortOn='caption'></List>
+  );
 }
 
 export default App;

@@ -55,6 +55,7 @@ function List({
   const [localSearch, setLocalSearch] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const loadMore = useRef(null);
+  const listItemsDiv = useRef(null);
   const prevConfig = usePrevious({
     pageNumber,
     pageSize,
@@ -134,13 +135,26 @@ function List({
         setList(sort(data));
       }
 
+      /**
+       * Change scroll position.
+       * Reason: When sorting is applied and the items in the fetched
+       * page are not inserted in the visible portion of the DOM then
+       * the scroll position remains the same and the loadmore icon is
+       * visible till this scenario is no longer true.
+       * This results in fetching of multiple pages.
+       */
+      const ele = listItemsDiv.current;
+      if (ele && ele.scrollTop > 200) {
+        ele.scrollTop = ele.scrollTop - 200;
+      }
+
       setLoading(false);
     } catch (error) {
       setList([]);
       setLoading(false);
       throw new Error(error);
     }
-  }, [onLoad, pageNumber, pageSize, searchText, sort, preventRender, selectedItems]);
+  }, [onLoad, pageNumber, pageSize, preventRender, searchText, selectedItems, sort]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -179,7 +193,7 @@ function List({
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
-      if (pageSize && totalPages && onLoad) {
+      if (pageSize && onLoad) {
         setSearchText(value || '');
         setPageNumber(1);
       } else {
@@ -236,7 +250,7 @@ function List({
       return (
         <>
           {addButtons(displayList)}
-          <div className={`list-items ${!singleSelect ? 'multi' : ''}`}>
+          <div className={`list-items ${!singleSelect ? 'multi' : ''}`} ref={listItemsDiv}>
             {displayList.map((item) => {
               return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
             })}
@@ -268,12 +282,13 @@ function List({
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5,
+      threshold: 1.0,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages) {
+      const fetchNextPage = entries[0].isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages;
+
+      if (fetchNextPage) {
         setPageNumber((prev) => prev + 1);
       }
     }, options);
