@@ -47,20 +47,15 @@ function App() {
     console.log(selectedItems);
   };
 
-  return (
-    <List
-      onLoad={getData}
-      onSelectionsChange={selectionsChanged}
-      searchPlaceholder='Search..'
-      noRecordsMessage='No Records Found'></List>
-  );
+  const captions = {
+    SEARCH_PLACEHOLDER: 'Search...',
+    NO_DATA: 'No Records Found',
+    CLEAR_ALL: 'Clear Selections',
+    CLEAR_TOOLTIP: 'Clear',
+    SEARCH_TOOLTIP: 'Search',
+  };
+
+  return <List onLoad={getData} onSelectionsChange={selectionsChanged} captions={captions}></List>;
 }
 
 export default App;
-
-// localization of constants
-// no record message
-// search placeholder
-// clear selections
-// icon titles
-// handle scenario when total pages is 0

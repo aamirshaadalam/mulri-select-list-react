@@ -11,8 +11,11 @@ const ENDS_WITH = 'endsWith';
 const STRING = 'string';
 const ENTER = 'Enter';
 const DESC = 'desc';
-const NO_RECORDS = 'No Records';
-const CLEAR_SELECTIONS = 'Clear Selections';
+const NO_DATA = 'No Records Found';
+const SEARCH_PLACEHOLDER = 'Search...';
+const CLEAR_ALL = 'Clear Selections';
+const CLEAR_TOOLTIP = 'Clear';
+const SEARCH_TOOLTIP = 'Search';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -33,17 +36,16 @@ const compare = (value1, value2, sortDirection) => {
 };
 
 function List({
+  captions,
   data,
   onLoad,
+  onSelectionsChange,
   pageSize,
-  searchPlaceholder,
   searchType,
   singleSelect,
   sortDirection,
   sortOn,
-  noRecordsMessage,
   totalPages,
-  onSelectionsChange,
 }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,6 +60,13 @@ function List({
     pageSize,
     searchText,
   });
+  const resources = {
+    SEARCH_PLACEHOLDER: captions ? captions.SEARCH_PLACEHOLDER || SEARCH_PLACEHOLDER : SEARCH_PLACEHOLDER,
+    NO_DATA: captions ? captions.NO_DATA || NO_DATA : NO_DATA,
+    CLEAR_ALL: captions ? captions.CLEAR_ALL || CLEAR_ALL : CLEAR_ALL,
+    CLEAR_TOOLTIP: captions ? captions.CLEAR_TOOLTIP || CLEAR_TOOLTIP : CLEAR_TOOLTIP,
+    SEARCH_TOOLTIP: captions ? captions.SEARCH_TOOLTIP || SEARCH_TOOLTIP : SEARCH_TOOLTIP,
+  };
 
   const sort = useCallback(
     (items) => {
@@ -200,7 +209,7 @@ function List({
     if (displayList.length > 0 && !singleSelect) {
       return (
         <div className='btn-container'>
-          <button onClick={clearSelections}>{CLEAR_SELECTIONS}</button>
+          <button onClick={clearSelections}>{resources.CLEAR_ALL}</button>
         </div>
       );
     }
@@ -240,7 +249,7 @@ function List({
     } else {
       return (
         <div className='list-items center'>
-          <div className='no-data'>{noRecordsMessage || NO_RECORDS}</div>
+          <div className='no-data'>{resources.NO_DATA}</div>
         </div>
       );
     }
@@ -282,7 +291,11 @@ function List({
 
   return (
     <div className='list-group'>
-      <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
+      <SearchBox
+        placeholder={resources.SEARCH_PLACEHOLDER}
+        clearTitle={resources.CLEAR_TOOLTIP}
+        searchTitle={resources.SEARCH_TOOLTIP}
+        {...{ search, searchText }}></SearchBox>
       {getContent()}
     </div>
   );
