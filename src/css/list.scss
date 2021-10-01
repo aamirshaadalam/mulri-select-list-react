@@ -52,10 +52,10 @@ $gray3: rgb(216, 224, 229);
 
   .list-items {
     overflow-y: auto;
-    height: calc(100% - 80px);
+    height: calc(100% - 70px);
 
     &.multi {
-      height: calc(100% - 120px);
+      height: calc(100% - 110px);
     }
 
     .list-item {
@@ -97,7 +97,7 @@ $gray3: rgb(216, 224, 229);
 
     .loading-item {
       display: flex;
-      padding: 20px 0px;
+      padding: 10px 0px;
       justify-content: center;
 
       &.hidden {

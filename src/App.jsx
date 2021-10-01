@@ -21,7 +21,6 @@ function App() {
     let result = data;
 
     console.log(JSON.stringify(config));
-    console.log(`Total number of records: ${data.length}`);
 
     if (searchText) {
       result = data.filter((item) => {
@@ -29,7 +28,7 @@ function App() {
       });
     }
 
-    if (pageNumber > 0 && pageSize) {
+    if (pageNumber && pageSize) {
       computePageCount(result, pageSize);
       const start = (pageNumber - 1) * pageSize;
       const end = start + pageSize;
@@ -47,20 +46,24 @@ function App() {
     console.log(selectedItems);
   };
 
+  const captions = {
+    SEARCH_PLACEHOLDER: 'Search...',
+    NO_DATA: 'No Records Found',
+    CLEAR_ALL: 'Clear Selections',
+    CLEAR_TOOLTIP: 'Clear',
+    SEARCH_TOOLTIP: 'Search',
+  };
+
   return (
     <List
       onLoad={getData}
       onSelectionsChange={selectionsChanged}
-      searchPlaceholder='Search..'
-      noRecordsMessage='No Records Found'></List>
+      captions={captions}
+      pageSize={100}
+      totalPages={totalPages}
+      sortDirection='asc'
+      sortOn='caption'></List>
   );
 }
 
 export default App;
-
-// localization of constants
-// no record message
-// search placeholder
-// clear selections
-// icon titles
-// handle scenario when total pages is 0

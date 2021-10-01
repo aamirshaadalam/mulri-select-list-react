@@ -11,8 +11,11 @@ const ENDS_WITH = 'endsWith';
 const STRING = 'string';
 const ENTER = 'Enter';
 const DESC = 'desc';
-const NO_RECORDS = 'No Records';
-const CLEAR_SELECTIONS = 'Clear Selections';
+const NO_DATA = 'No Records Found';
+const SEARCH_PLACEHOLDER = 'Search...';
+const CLEAR_ALL = 'Clear Selections';
+const CLEAR_TOOLTIP = 'Clear';
+const SEARCH_TOOLTIP = 'Search';
 
 const compare = (value1, value2, sortDirection) => {
   let result = 0;
@@ -33,17 +36,16 @@ const compare = (value1, value2, sortDirection) => {
 };
 
 function List({
+  captions,
   data,
   onLoad,
+  onSelectionsChange,
   pageSize,
-  searchPlaceholder,
   searchType,
   singleSelect,
   sortDirection,
   sortOn,
-  noRecordsMessage,
   totalPages,
-  onSelectionsChange,
 }) {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,11 +55,19 @@ function List({
   const [localSearch, setLocalSearch] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const loadMore = useRef(null);
+  const listItemsDiv = useRef(null);
   const prevConfig = usePrevious({
     pageNumber,
     pageSize,
     searchText,
   });
+  const resources = {
+    SEARCH_PLACEHOLDER: captions ? captions.SEARCH_PLACEHOLDER || SEARCH_PLACEHOLDER : SEARCH_PLACEHOLDER,
+    NO_DATA: captions ? captions.NO_DATA || NO_DATA : NO_DATA,
+    CLEAR_ALL: captions ? captions.CLEAR_ALL || CLEAR_ALL : CLEAR_ALL,
+    CLEAR_TOOLTIP: captions ? captions.CLEAR_TOOLTIP || CLEAR_TOOLTIP : CLEAR_TOOLTIP,
+    SEARCH_TOOLTIP: captions ? captions.SEARCH_TOOLTIP || SEARCH_TOOLTIP : SEARCH_TOOLTIP,
+  };
 
   const sort = useCallback(
     (items) => {
@@ -125,13 +135,26 @@ function List({
         setList(sort(data));
       }
 
+      /**
+       * Change scroll position.
+       * Reason: When sorting is applied and the items in the fetched
+       * page are not inserted in the visible portion of the DOM then
+       * the scroll position remains the same and the loadmore icon is
+       * visible till this scenario is no longer true.
+       * This results in fetching of multiple pages.
+       */
+      const ele = listItemsDiv.current;
+      if (ele && ele.scrollTop > 200) {
+        ele.scrollTop = ele.scrollTop - 200;
+      }
+
       setLoading(false);
     } catch (error) {
       setList([]);
       setLoading(false);
       throw new Error(error);
     }
-  }, [onLoad, pageNumber, pageSize, searchText, sort, preventRender, selectedItems]);
+  }, [onLoad, pageNumber, pageSize, preventRender, searchText, selectedItems, sort]);
 
   const updateSelections = useCallback(
     (key) => {
@@ -170,7 +193,7 @@ function List({
 
   const search = (key, value) => {
     if (key === ENTER || !value) {
-      if (pageSize && totalPages && onLoad) {
+      if (pageSize && onLoad) {
         setSearchText(value || '');
         setPageNumber(1);
       } else {
@@ -200,7 +223,7 @@ function List({
     if (displayList.length > 0 && !singleSelect) {
       return (
         <div className='btn-container'>
-          <button onClick={clearSelections}>{CLEAR_SELECTIONS}</button>
+          <button onClick={clearSelections}>{resources.CLEAR_ALL}</button>
         </div>
       );
     }
@@ -227,7 +250,7 @@ function List({
       return (
         <>
           {addButtons(displayList)}
-          <div className={`list-items ${!singleSelect ? 'multi' : ''}`}>
+          <div className={`list-items ${!singleSelect ? 'multi' : ''}`} ref={listItemsDiv}>
             {displayList.map((item) => {
               return <ListItem key={item.key} {...{ item, updateSelections }}></ListItem>;
             })}
@@ -240,7 +263,7 @@ function List({
     } else {
       return (
         <div className='list-items center'>
-          <div className='no-data'>{noRecordsMessage || NO_RECORDS}</div>
+          <div className='no-data'>{resources.NO_DATA}</div>
         </div>
       );
     }
@@ -259,12 +282,13 @@ function List({
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5,
+      threshold: 1.0,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages) {
+      const fetchNextPage = entries[0].isIntersecting && !loading && pageSize && totalPages && pageNumber < totalPages;
+
+      if (fetchNextPage) {
         setPageNumber((prev) => prev + 1);
       }
     }, options);
@@ -282,7 +306,11 @@ function List({
 
   return (
     <div className='list-group'>
-      <SearchBox {...{ searchPlaceholder, search, searchText }}></SearchBox>
+      <SearchBox
+        placeholder={resources.SEARCH_PLACEHOLDER}
+        clearTitle={resources.CLEAR_TOOLTIP}
+        searchTitle={resources.SEARCH_TOOLTIP}
+        {...{ search, searchText }}></SearchBox>
       {getContent()}
     </div>
   );
