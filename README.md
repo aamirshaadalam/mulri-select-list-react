@@ -29,19 +29,44 @@ This component offers following features:
   - CLEAR_TOOLTIP: Tooltip for the `Clear` icon.
   - SEARCH_TOOLTIP: Tooltip for `Search` icon.
 
+```javascript
+// Sample object for 'captions'
+
+{
+    SEARCH_PLACEHOLDER: 'Search...',
+    NO_DATA: 'No Records Found',
+    CLEAR_ALL: 'Clear Selections',
+    CLEAR_TOOLTIP: 'Clear',
+    SEARCH_TOOLTIP: 'Search',
+}
+```
+
 ### **data**
 
-- **Datatype:** `Array<Objects>`
+- **Datatype:** `Array<Object>`
 - **Description:** List of items to be displayed. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a static list.
 
 ### **onLoad**
 
 - **Datatype:** `Function`
+- **Return Type:** `Array<Object>`
 - **Description:** Function to be called to fetch the list. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
+
+> **Note:** The `Object` must contain `caption` and `key` properties.
+
+```javascript
+// Sample object
+{
+    caption: 'item caption',
+    key: 1234,
+    ...
+}
+```
 
 ### **onSelectionsChange**
 
 - **Datatype:** `Function`
+- **Return Type:** `NA`
 - **Description:** A callback function to be called whenever there is a change in selected items.
 
 ### **pageSize**
