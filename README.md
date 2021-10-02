@@ -22,24 +22,25 @@ This component offers following features:
 ### **captions**
 
 - **Datatype:** `Object`
-- **Description:** Used to customize the texts used in the `List` component. The following properties can be set to customize respective texts:
+- **Description:** Customize texts used in the `List` component. The following properties can be set to customize respective texts:
+
   - SEARCH_PLACEHOLDER: Placeholder text for the search box.
   - NO_DATA: The message to be displayed when the list is empty.
   - CLEAR_ALL: The button text for `Clear Selections` button.
   - CLEAR_TOOLTIP: Tooltip for the `Clear` icon.
   - SEARCH_TOOLTIP: Tooltip for `Search` icon.
 
-```javascript
-// Sample object for 'captions'
+  ```javascript
+  // Sample object for 'captions'
 
-{
-    SEARCH_PLACEHOLDER: 'Search...',
-    NO_DATA: 'No Records Found',
-    CLEAR_ALL: 'Clear Selections',
-    CLEAR_TOOLTIP: 'Clear',
-    SEARCH_TOOLTIP: 'Search',
-}
-```
+  {
+      SEARCH_PLACEHOLDER: 'Search...',
+      NO_DATA: 'No Records Found',
+      CLEAR_ALL: 'Clear Selections',
+      CLEAR_TOOLTIP: 'Clear',
+      SEARCH_TOOLTIP: 'Search',
+  }
+  ```
 
 ### **data**
 
@@ -50,15 +51,34 @@ This component offers following features:
 
 - **Datatype:** `Function`
 - **Return Type:** `Array<Object>`
-- **Description:** Function to be called to fetch the list. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
+- **Parameters:** `configObject`
 
-> **Note:** The `Object` must contain `caption` and `key` properties.
+  ```javascript
+  // structure of 'configObject'
+
+  {
+    pageNumber: '<page number>',
+    searchText: '<search term>',
+    pageSize: '<page size>'
+  }
+
+  // Call to 'onLoad' function
+  onLoad(configObject)
+  ```
+
+- **Description:** Function to fetch list data. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
+- **Usage:**
+  - Fetch list data.
+  - Perform server side search.
+
+> **Note:** The list item `Object` must contain `caption` and `key` properties.
 
 ```javascript
-// Sample object
+// List item object
+
 {
     caption: 'item caption',
-    key: 1234,
+    key: 1234, // can be number or string, should be unique
     ...
 }
 ```
@@ -67,7 +87,17 @@ This component offers following features:
 
 - **Datatype:** `Function`
 - **Return Type:** `NA`
-- **Description:** A callback function to be called whenever there is a change in selected items.
+- **Parameters:** `selectedItems`
+
+  ```javascript
+  // Call to 'onSelectionsChange' function
+  onSelectionsChange(selectedItems);
+
+  // Structure of 'selectedItems' (array of list item keys)
+  selectedItems = [123, 456, 789];
+  ```
+
+- **Description:** A callback function to be called whenever there is a change in selections.
 
 ### **pageSize**
 
@@ -92,11 +122,15 @@ This component offers following features:
 ### **sortOn**
 
 - **Datatype:** `String`
-- **Description:** The sort column. This is the column whose value should be considered while sorting the list.
+- **Description:** The sort column. This is the column whose value should be considered while sorting the list (belongs to list item object).
 
 ### **totalPages**
 
 - **Datatype:** `Number`
 - **Description:** Total number of pages. This required if the list should support pagination. The component only supports server side pagination and this property will be ignored for static lists.
 
-> **Note:** `totalPages`, `pageSize` and `onLoad` props are required for dynamic list, server side search and pagination.
+> **Note:** The required properties for the following features are listed beside each feature:
+>
+> - Dynamic list (`onLoad`).
+> - Server side search (`totalPages`, `pageSize`, `onLoad`).
+> - Pagination (`totalPages`, `pageSize`, `onLoad`).
