@@ -50,7 +50,26 @@ This component offers following features:
 ### **onLoad**
 
 - **Datatype:** `Function`
+- **Description:** Function to fetch list data. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
+- **Usage:**
+
+  - Fetch list data.
+  - Perform server side search.
+
 - **Return Type:** `Array<Object>`
+
+  > **Note:** The list item `Object` must contain `caption` and `key` properties.
+
+  ```javascript
+  // List item object
+
+  {
+      caption: 'item caption',
+      key: 1234, // can be number or string, should be unique
+      ...
+  }
+  ```
+
 - **Parameters:** `configObject`
 
   ```javascript
@@ -66,26 +85,12 @@ This component offers following features:
   onLoad(configObject)
   ```
 
-- **Description:** Function to fetch list data. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
-- **Usage:**
-  - Fetch list data.
-  - Perform server side search.
-
-> **Note:** The list item `Object` must contain `caption` and `key` properties.
-
-```javascript
-// List item object
-
-{
-    caption: 'item caption',
-    key: 1234, // can be number or string, should be unique
-    ...
-}
-```
-
 ### **onSelectionsChange**
 
 - **Datatype:** `Function`
+- **Description:** A callback function to be called whenever there is a change in selections.
+- **Usage:**
+  - Pass list of selected items to the consumer.
 - **Return Type:** `NA`
 - **Parameters:** `selectedItems`
 
@@ -96,8 +101,6 @@ This component offers following features:
   // Structure of 'selectedItems' (array of list item keys)
   selectedItems = [123, 456, 789];
   ```
-
-- **Description:** A callback function to be called whenever there is a change in selections.
 
 ### **pageSize**
 
