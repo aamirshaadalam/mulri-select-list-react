@@ -56,12 +56,12 @@ This component offers following features:
   - Fetch list data.
   - Perform server side search.
 
-- **Return Type:** `Array<Object>`
+- **Return Type:** `Promise<Array<Object>>`
 
-  > **Note:** The list item `Object` must contain `caption` and `key` properties.
+  > **Note:** `Object` must have `caption` and `key` properties as shown below.
 
   ```javascript
-  // List item object
+  // Structure of object
 
   {
       caption: 'item caption',
@@ -70,10 +70,10 @@ This component offers following features:
   }
   ```
 
-- **Parameters:** `configObject`
+- **Parameters:** `config`
 
   ```javascript
-  // structure of 'configObject'
+  // structure of 'config'
 
   {
     pageNumber: '<page number>',
@@ -81,8 +81,8 @@ This component offers following features:
     pageSize: '<page size>'
   }
 
-  // Call to 'onLoad' function
-  onLoad(configObject)
+  // Calling 'onLoad' function
+  const data = await onLoad(config)
   ```
 
 ### **onSelectionsChange**
@@ -95,11 +95,11 @@ This component offers following features:
 - **Parameters:** `selectedItems`
 
   ```javascript
-  // Call to 'onSelectionsChange' function
-  onSelectionsChange(selectedItems);
-
   // Structure of 'selectedItems' (array of list item keys)
-  selectedItems = [123, 456, 789];
+  const selectedItems = [123, 456, 789];
+
+  // Calling 'onSelectionsChange' function
+  onSelectionsChange(selectedItems);
   ```
 
 ### **pageSize**
