@@ -37,11 +37,11 @@ const compare = (value1, value2, sortDirection) => {
 
 function List({
   captions,
+  comparisonType,
   data,
   onLoad,
   onSelectionsChange,
   pageSize,
-  searchType,
   singleSelect,
   sortDirection,
   sortOn,
@@ -202,7 +202,7 @@ function List({
           setSearchResults([]);
         } else {
           const filteredList = list.filter((item) => {
-            switch (searchType) {
+            switch (comparisonType) {
               case STARTS_WITH:
                 return item.caption.toLowerCase().startsWith(value);
               case ENDS_WITH:
