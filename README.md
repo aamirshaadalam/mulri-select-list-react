@@ -15,7 +15,9 @@ This component offers following features:
 - Clear all selections
 - Custom captions that can be used to localize texts used in the component.
 
-# How to use
+> **Note:** `Search` is triggered on the press of `Enter` key.
+
+# Usage
 
 # Props
 
@@ -41,6 +43,11 @@ This component offers following features:
       SEARCH_TOOLTIP: 'Search',
   }
   ```
+
+### **comparisonType**
+
+- **Type:** `String`
+- **Description:** The comparison method used to compare the searched term with the items in list while performing client-side search. This prop will be ignored for server-side search. The default value for `comparisonType` is `includes` and you can ignore this prop if you want to use the default comparison type. The other valid values are `startsWith` and `endsWith`.
 
 ### **data**
 
@@ -106,11 +113,6 @@ This component offers following features:
 
 - **Type:** `Number`
 - **Description:** Size of the each page if the list is paginated. The component only supports server side pagination. Hence, this prop will be ignored for static list.
-
-### **searchType**
-
-- **Type:** `String`
-- **Description:** Type of search for static list. This prop will be ignored for server side search. The default `searchType` is `includes` and you can ignore this prop if you want to use the default search type. The other valid values are `startsWith` and `endsWith`.
 
 ### **singleSelect**
 
