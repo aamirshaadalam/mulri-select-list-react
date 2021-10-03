@@ -21,7 +21,7 @@ This component offers following features:
 
 ### **captions**
 
-- **Datatype:** `Object`
+- **Type:** `Object`
 - **Description:** Customize texts used in the `List` component. The following properties can be set to customize respective texts:
 
   - SEARCH_PLACEHOLDER: Placeholder text for the search box.
@@ -44,12 +44,12 @@ This component offers following features:
 
 ### **data**
 
-- **Datatype:** `Array<Object>`
+- **Type:** `Array<Object>`
 - **Description:** List of items to be displayed. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a static list.
 
 ### **onLoad**
 
-- **Datatype:** `Function`
+- **Type:** `Function`
 - **Description:** Function to fetch list data. This is an optional prop but, either `data` or `onLoad` is required. Use this to display a dynamic list.
 - **Usage:**
 
@@ -87,7 +87,7 @@ This component offers following features:
 
 ### **onSelectionsChange**
 
-- **Datatype:** `Function`
+- **Type:** `Function`
 - **Description:** A callback function to be called whenever there is a change in selections.
 - **Usage:**
   - Pass list of selected items to the consumer.
@@ -104,32 +104,32 @@ This component offers following features:
 
 ### **pageSize**
 
-- **Datatype:** `Number`
+- **Type:** `Number`
 - **Description:** Size of the each page if the list is paginated. The component only supports server side pagination. Hence, this prop will be ignored for static list.
 
 ### **searchType**
 
-- **Datatype:** `String`
+- **Type:** `String`
 - **Description:** Type of search for static list. This prop will be ignored for server side search. The default `searchType` is `includes` and you can ignore this prop if you want to use the default search type. The other valid values are `startsWith` and `endsWith`.
 
 ### **singleSelect**
 
-- **Datatype:** `Boolean`
+- **Type:** `Boolean`
 - **Description:** Behavior of the `List`. The default behavior is multi select. Ignore this prop if your list is multi select. For single select lists, specify `singleSelect` as an attribute.
 
 ### **sortDirection**
 
-- **Datatype:** `String`
+- **Type:** `String`
 - **Description:** Sort direction for the list items if the list should appear in sorted order. The valid values are `asc` and `desc`.
 
 ### **sortOn**
 
-- **Datatype:** `String`
+- **Type:** `String`
 - **Description:** The sort column. This is the column whose value should be considered while sorting the list (belongs to list item object).
 
 ### **totalPages**
 
-- **Datatype:** `Number`
+- **Type:** `Number`
 - **Description:** Total number of pages. This required if the list should support pagination. The component only supports server side pagination and this property will be ignored for static lists.
 
 > **Note:** The required properties for the following features are listed beside each feature:
